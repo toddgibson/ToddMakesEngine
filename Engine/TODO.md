@@ -26,7 +26,9 @@ TODO - Engine Features
 - Factory w/ object pooling
 - 2D
   - sprites
+    - animation frames (individual or sprite sheet)
   - grids (square, hex)
+    - animated?
   - particles
   - collision shapes
   - shaders?
