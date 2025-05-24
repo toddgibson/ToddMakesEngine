@@ -31,7 +31,9 @@ public class SampleGame(GameOptions gameOptions) : Game(gameOptions)
             .OnFinished(() =>
             {
                 _testButton.IsEnabled = true;
-                _testButton.TextureTint = ColorHelpers.GetRandomColor();
+                var newColor = ColorHelpers.GetRandomColor();
+                _testButton.TextureTint = newColor;
+                _testButton.HoverColor = newColor.Add(45);
             });
         
         return Task.CompletedTask;
