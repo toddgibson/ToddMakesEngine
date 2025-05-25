@@ -1,7 +1,7 @@
 ﻿using Engine;
-using RaylibTest;
+using TestGame;
 
-var sampleGame = new SampleGame(new GameOptions()
+var sampleGame = new SampleGame(new GameSettings()
 {
     GameTitle = "Sample Game",
     TargetFrameRate = 60

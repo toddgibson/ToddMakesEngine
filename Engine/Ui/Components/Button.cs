@@ -13,7 +13,7 @@ public class Button : UiComponent
         Size = Texture.HasValue ? new Vector2(Texture.Value.Width, Texture.Value.Height) : new Vector2(150, 40);
     }
     
-    public Button(string text, Func<Task> clickFunc) : this()
+    public Button(string text, Func<Button, Task> clickFunc) : this()
     {
         Texture = UiSystem.DefaultButtonTexture;
         PivotPoint = new Vector2(Texture.Value.Width * 0.5f, Texture.Value.Height * 0.5f);
@@ -23,7 +23,7 @@ public class Button : UiComponent
         OnClick += clickFunc;
     }
 
-    public Button(Texture2D backgroundTexture, string text, Font font, Func<Task> clickFunc) : this()
+    public Button(Texture2D backgroundTexture, string text, Font font, Func<Button, Task> clickFunc) : this()
     {
         Texture = backgroundTexture;
         PivotPoint = new Vector2(Texture.Value.Width * 0.5f, Texture.Value.Height * 0.5f);
@@ -33,7 +33,7 @@ public class Button : UiComponent
         OnClick += clickFunc;
     }
     
-    public Func<Task>? OnClick { get; set; }
+    public Func<Button, Task>? OnClick { get; set; }
     public string Text { get; set; } = "";
     public Vector2 TextOffset { get; set; } = Vector2.Zero;
     public Font Font { get; set; } = Raylib.GetFontDefault();
@@ -79,7 +79,7 @@ public class Button : UiComponent
 
         if (IsHovered && Raylib.IsMouseButtonPressed(0))
         {
-            OnClick?.Invoke();
+            OnClick?.Invoke(this);
         }
     }
     

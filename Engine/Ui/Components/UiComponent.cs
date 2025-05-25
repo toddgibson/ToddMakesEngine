@@ -7,8 +7,6 @@ namespace Engine.Ui.Components;
 
 public abstract class UiComponent
 {
-    protected UiComponent() => UiSystem.AddComponent(this);
-
     public bool Active { get; set; } = true;
     public Vector2 Size { get; set; } = new(64, 64);
     public Vector2 Position { get; set; }

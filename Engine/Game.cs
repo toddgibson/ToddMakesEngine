@@ -1,33 +1,61 @@
+using System.Data;
 using Engine.Systems;
 using Raylib_cs;
+using ZLinq;
 
 namespace Engine;
 
-public class Game : IDisposable
+public abstract class Game(GameSettings settings) : IDisposable
 {
-    public readonly GameOptions GameOptions;
+    public readonly GameSettings Settings = settings;
+    public readonly SceneManager SceneManager = new();
 
-    protected Game(GameOptions gameOptions)
-    {
-        GameOptions = gameOptions;
-    }
-
-    public virtual void Initialize()
+    internal void InitializeInternal()
     {
         UiSystem.Initialize();
+        Initialize();
     }
 
-    public void Update()
+    protected virtual void Initialize() { }
+
+    protected void AddScene(Scene scene, bool makeActiveScene = false)
     {
+        SceneManager.AddScene(scene);
+        if (makeActiveScene)
+            SetActiveScene(scene);
+    }
+
+    public void SetActiveScene(Scene sampleScene) => SceneManager.SetActiveScene(sampleScene);
+    public void SetActiveScene(string sceneName) => SceneManager.SetActiveScene(sceneName);
+    protected void RemoveScene(Scene scene) => SceneManager.RemoveScene(scene);
+
+    internal void UpdateInternal()
+    {
+        if (SceneManager.CurrentScene is null)
+            throw new ConstraintException("There is no active scene.");
+        
         var deltaTime = Raylib.GetFrameTime();
+        SceneManager.CurrentScene.Update(deltaTime);
+        if (SceneManager.CurrentScene.IntervalActions.Count > 0)
+        {
+            foreach (var action in SceneManager.CurrentScene.IntervalActions
+                         .AsValueEnumerable()
+                         .Where(p => p.ShouldRun))
+            {
+                action.Run();
+            }
+        }
         TweenSystem.Update(deltaTime);
-        UiSystem.Update(deltaTime);
+        UiSystem.Update(deltaTime, SceneManager.CurrentScene);
     }
 
-    public void Draw()
+    internal void DrawInternal()
     {
+        if (SceneManager.CurrentScene is null)
+            throw new ConstraintException("There is no active scene.");
+        
         Raylib.BeginDrawing();
-        Raylib.ClearBackground(GameOptions.ClearColor);
+        Raylib.ClearBackground(Settings.ClearColor);
         Raylib.DrawFPS(12, 12);
         
         // DRAW GAME COMPONENTS
@@ -36,7 +64,7 @@ public class Game : IDisposable
         // END DRAW GAME COMPONENTS
         
         // DRAW UI
-        UiSystem.Draw();
+        UiSystem.Draw(SceneManager.CurrentScene);
         // END DRAW UI
         
         Raylib.EndDrawing();
@@ -59,13 +87,4 @@ public class Game : IDisposable
     {
         Dispose(false);
     }
-}
-
-public class GameOptions
-{
-    public Color ClearColor { get; set; } = Color.Black;
-    public int TargetFrameRate { get; set; }
-    public int ScreenWidth { get; set; } = 1280;
-    public int ScreenHeight { get; set; } = 720;
-    public string GameTitle { get; set; } = "Todd Makes Game";
 }

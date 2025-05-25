@@ -7,9 +7,9 @@ namespace Engine.Systems;
 
 public static class UiSystem
 {
-    private static readonly HashSet<UiComponent> UiComponents = [];
     public static Font DefaultFont { get; private set; }
     public static Texture2D DefaultButtonTexture { get; private set; }
+    public static bool IsCursorHoveringUi { get; private set; }
 
     internal static void Initialize()
     {
@@ -27,19 +27,21 @@ public static class UiSystem
             Log.Info("UiSystem Initialized");
         }
     }
-    
-    internal static void AddComponent(UiComponent component) => UiComponents.Add(component);
-    internal static void RemoveComponent(UiComponent component) => UiComponents.Remove(component);
 
-    internal static void Update(float delta)
+    internal static void Update(float delta, Scene scene)
     {
-        foreach (var component in UiComponents.AsValueEnumerable().Where(p => p.Active))
+        IsCursorHoveringUi = false;
+        foreach (var component in scene.UiComponents.AsValueEnumerable().Where(p => p.Active))
+        {
             component.Update(delta);
+            if (component.IsHovered)
+                IsCursorHoveringUi = true;
+        }
     }
 
-    internal static void Draw()
+    internal static void Draw(Scene scene)
     {
-        foreach (var component in UiComponents.AsValueEnumerable().Where(p => p.Active))
+        foreach (var component in scene.UiComponents.AsValueEnumerable().Where(p => p.Active))
             component.Draw();
     }
 

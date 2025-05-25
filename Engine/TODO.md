@@ -2,6 +2,7 @@ TODO - Engine Features
 ---
 
 - Scene Management
+  - transitions
 - Input (wrapper?)
   - bindings
 - Audio (wrapper?)
@@ -20,6 +21,7 @@ TODO - Engine Features
   - 9-patch
   - panel
     - can have children
+  - z-index?
 - Tweens
   - sequences
 - State machine
@@ -34,3 +36,7 @@ TODO - Engine Features
   - shaders?
   - camera
     - culling system
+  - debug console
+    - command system
+  - event/message bus
+    - just use plain C# events?
