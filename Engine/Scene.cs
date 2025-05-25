@@ -16,7 +16,8 @@ public abstract class Scene(Game game, string name)
     protected void RemoveUiComponent(UiComponent component) => UiComponents.Remove(component);
     
     protected internal abstract void Initialize();
-    protected internal virtual void WhenBecomesActive() { }
+    protected internal virtual void Activated() { }
+    protected internal virtual void Deactivated() { }
     protected internal virtual void Update(float deltaTime) { }
 
     protected void RunAtInterval(Action action, float delaySeconds)

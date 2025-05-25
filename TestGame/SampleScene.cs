@@ -17,10 +17,24 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         AddUiComponent(new Button(Name == "SampleScene" ? "Spin Me!" : "Whoa Dude!", HandleButtonClickAsync));
     }
 
-    protected override void WhenBecomesActive()
+    protected override void Activated()
     {
+        Log.Info($"Scene activated!", ConsoleColor.DarkGreen);
+        SceneManager.SceneChanged += HandleSceneChanged;
+        
         if (Name == "SampleScene")
             RunAtInterval(Simulation, 2);
+    }
+
+    protected override void Deactivated()
+    {
+        Log.Info($"Scene deactivated!", ConsoleColor.DarkGreen);
+        SceneManager.SceneChanged -= HandleSceneChanged;
+    }
+
+    private void HandleSceneChanged(string name, int stackSize)
+    {
+        Log.Info($"Active scene is now {name}. Stack size: {stackSize}", ConsoleColor.Yellow);
     }
 
     private void Simulation()
