@@ -9,6 +9,8 @@ public abstract class Game(GameSettings settings) : IDisposable
 {
     public readonly GameSettings Settings = settings;
     public readonly SceneManager SceneManager = new();
+    
+    public bool DisplayFps = false;
 
     internal void InitializeInternal()
     {
@@ -56,7 +58,6 @@ public abstract class Game(GameSettings settings) : IDisposable
         
         Raylib.BeginDrawing();
         Raylib.ClearBackground(Settings.ClearColor);
-        Raylib.DrawFPS(12, 12);
         
         // DRAW GAME COMPONENTS
         //Raylib.DrawText("Hello, world!", 12, 42, 20, Color.White);
@@ -66,6 +67,9 @@ public abstract class Game(GameSettings settings) : IDisposable
         // DRAW UI
         UiSystem.Draw(SceneManager.CurrentScene);
         // END DRAW UI
+        
+        if (DisplayFps)
+            Raylib.DrawFPS(12, 12);
         
         Raylib.EndDrawing();
     }

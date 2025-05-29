@@ -12,9 +12,12 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
 {
     private const bool UseSceneNavigation = true;
 
+    private Label _label;
+    
     protected override void Initialize()
     {
         AddUiComponent(new Button(Name == "SampleScene" ? "Spin Me!" : "Whoa Dude!", HandleButtonClickAsync));
+        _label = AddUiComponent(new Label("Hello World!"));
     }
 
     protected override void Activated()
@@ -40,6 +43,8 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
     private void Simulation()
     {
         Log.Info("simulation");
+        _label.TextColor = ColorHelpers.GetRandomColor();
+        _label.TweenRotation(_label.Rotation + 45, 1.0f);
     }
 
     private Task HandleButtonClickAsync(Button button)
@@ -79,9 +84,19 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         return Task.CompletedTask;
     }
 
+    private Vector2 _labelVelocity = Vector2.One;
+    private float _labelSpeed = 100f;
+    
     protected override void Update(float deltaTime)
     {
         if (UiSystem.IsCursorHoveringUi)
             Log.Info(deltaTime, ConsoleColor.DarkMagenta);
+
+        _label.Position += deltaTime * _labelSpeed * _labelVelocity;
+        
+        if (_label.Position.X >= Game.Settings.ScreenWidth || _label.Position.X <= 0)
+            _labelVelocity *= new Vector2(-1, 1);
+        if (_label.Position.Y >= Game.Settings.ScreenHeight || _label.Position.Y <= 0)
+            _labelVelocity *= new Vector2(1, -1);
     }
 }

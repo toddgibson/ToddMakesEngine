@@ -4,7 +4,7 @@ using Raylib_cs;
 
 namespace Engine.Ui.Components;
 
-public class Button : UiComponent
+public class Button : TexturedUiComponent
 {
     private Rectangle _drawRect;
 
@@ -17,7 +17,6 @@ public class Button : UiComponent
     {
         Texture = UiSystem.DefaultButtonTexture;
         PivotPoint = new Vector2(Texture.Value.Width * 0.5f, Texture.Value.Height * 0.5f);
-        Font = UiSystem.DefaultFont;
         Text = text;
         Anchor = AnchorEnum.MiddleCenter;
         OnClick += clickFunc;
@@ -36,7 +35,7 @@ public class Button : UiComponent
     public Func<Button, Task>? OnClick { get; set; }
     public string Text { get; set; } = "";
     public Vector2 TextOffset { get; set; } = Vector2.Zero;
-    public Font Font { get; set; } = Raylib.GetFontDefault();
+    public Font Font { get; set; } = UiSystem.DefaultFont;
     public float FontSize { get; set; } = 24;
     public float FontSpacing { get; set; }
     
@@ -73,7 +72,7 @@ public class Button : UiComponent
     private Color _textDrawColor => IsEnabled ? TextColor : DisabledTextColor;
     private bool _isPressed => IsHovered && Raylib.IsMouseButtonDown(0);
 
-    public override void Update(float delta)
+    internal override void Update(float delta)
     {
         if (!IsEnabled) return;
 
@@ -83,7 +82,7 @@ public class Button : UiComponent
         }
     }
     
-    public override void Draw()
+    internal override void Draw()
     {
         if (Texture.HasValue)
         {

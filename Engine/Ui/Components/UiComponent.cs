@@ -1,18 +1,13 @@
 using System.Numerics;
-using Engine.Systems;
 using Raylib_cs;
 using Rectangle = Raylib_cs.Rectangle;
 
 namespace Engine.Ui.Components;
 
-public abstract class UiComponent
+public abstract class TexturedUiComponent : UiComponent
 {
-    public bool Active { get; set; } = true;
-    public Vector2 Size { get; set; } = new(64, 64);
-    public Vector2 Position { get; set; }
-
     private Vector2 _scale = Vector2.One;
-    public Vector2 Scale
+    public new Vector2 Scale
     {
         get => _scale;
         set
@@ -22,10 +17,26 @@ public abstract class UiComponent
                 PivotPoint = new Vector2(Texture.Value.Width * Scale.X * 0.5f, Texture.Value.Height * Scale.Y * 0.5f);
         }
     }
-    public float Rotation { get; set; }
     public Texture2D? Texture { get; set; }
-    public Vector2 PivotPoint { get; set; } = Vector2.Zero;
     public Color TextureTint { get; set; } = Color.White;
+}
+
+public abstract class UiComponent
+{
+    public bool Active { get; set; } = true;
+    public Vector2 Size { get; set; } = new(64, 64);
+    public Vector2 Position { get; set; }
+    private Vector2 _scale = Vector2.One;
+    public Vector2 Scale
+    {
+        get => _scale;
+        set
+        {
+            _scale = value;
+        }
+    }
+    public float Rotation { get; set; }
+    public Vector2 PivotPoint { get; set; } = Vector2.Zero;
 
     public enum AnchorEnum
     {
@@ -79,7 +90,7 @@ public abstract class UiComponent
         }
     }
 
-    public abstract void Draw();
+    internal abstract void Draw();
 
-    public abstract void Update(float delta);
+    internal abstract void Update(float delta);
 }

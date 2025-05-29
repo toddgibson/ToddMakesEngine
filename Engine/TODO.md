@@ -41,3 +41,4 @@ TODO - Engine Features
   - event/message bus
     - just use plain C# events?
   - 3D?!?!?!
+  - Dialog system

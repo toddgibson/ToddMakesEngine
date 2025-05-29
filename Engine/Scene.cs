@@ -12,7 +12,12 @@ public abstract class Scene(Game game, string name)
     internal List<UiComponent> UiComponents = [];
     internal List<IntervalAction> IntervalActions = [];
     
-    protected void AddUiComponent(UiComponent component) => UiComponents.Add(component);
+    protected T AddUiComponent<T>(T component) where T : UiComponent
+    {
+        UiComponents.Add(component);
+        return component;
+    }
+
     protected void RemoveUiComponent(UiComponent component) => UiComponents.Remove(component);
     
     protected internal abstract void Initialize();

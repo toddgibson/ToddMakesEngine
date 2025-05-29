@@ -1,5 +1,4 @@
 using Engine;
-using Engine.Logging;
 
 namespace TestGame;
 
@@ -12,5 +11,7 @@ public class SampleGame(GameSettings settings) : Game(settings)
         
         AddScene(sampleScene, true);
         AddScene(sampleScene2);
+
+        DisplayFps = true;
     }
 }
