@@ -22,7 +22,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
 
     protected override void Activated()
     {
-        Log.Info($"Scene activated!", ConsoleColor.DarkGreen);
+        Log.Info($"Scene {Name} activated!", ConsoleColor.DarkGreen);
         SceneManager.SceneChanged += HandleSceneChanged;
         
         if (Name == "SampleScene")
@@ -31,7 +31,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
 
     protected override void Deactivated()
     {
-        Log.Info($"Scene deactivated!", ConsoleColor.DarkGreen);
+        Log.Info($"Scene {Name} deactivated!", ConsoleColor.DarkGreen);
         SceneManager.SceneChanged -= HandleSceneChanged;
     }
 
@@ -42,9 +42,11 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
 
     private void Simulation()
     {
-        Log.Info("simulation");
-        _label.TextColor = ColorHelpers.GetRandomColor();
-        _label.TweenRotation(_label.Rotation + 45, 1.0f);
+        Log.Info($"simulation");
+        
+        _label
+            .TweenColor(ColorHelpers.GetRandomColor(), 1.0f)
+            .TweenRotation(_label.Rotation + 45, 1.0f);
     }
 
     private Task HandleButtonClickAsync(Button button)

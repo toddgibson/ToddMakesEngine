@@ -15,6 +15,8 @@ public class Tween
     private readonly float _targetValue;
     private readonly Vector2 _startValueVector2;
     private readonly Vector2 _targetValueVector2;
+    private readonly Color _startValueColor;
+    private readonly Color _targetValueColor;
     private readonly float _duration;
     
     private float _elapsed;
@@ -67,6 +69,28 @@ public class Tween
         
         TweenSystem.StartTween(this);
     }
+    
+    public Tween(UiComponent component, string propertyName, Color startValue, Color targetValue, float duration)
+    {
+        Component = component;
+        _propertyName = propertyName;
+        _startValueColor = startValue;
+        _targetValueColor = targetValue;
+        _duration = duration;
+
+        _propertyInfo = Component.GetType().GetProperty(_propertyName);
+
+        if (_propertyInfo == null)
+        {
+            Log.Warning($"{component.GetType().Name}.{_propertyName} property could not be found");
+            return;
+        }
+        
+        if (TweenSystem.LoggingEnabled)
+            Log.Info($"Tween {propertyName} from {startValue} to {targetValue} with {duration}s duration");
+        
+        TweenSystem.StartTween(this);
+    }
 
     public void Update(float delta)
     {
@@ -88,6 +112,24 @@ public class Tween
         {
             var newValue = Raymath.Vector2Lerp(_startValueVector2, _targetValueVector2, _elapsed);
             _propertyInfo.SetValue(Component, newValue);
+        }
+        else if (_propertyInfo.PropertyType == typeof(Color))
+        {
+            var startR = (float)_startValueColor.R;
+            var targetR = (float)_targetValueColor.R;
+            var lerpR = Raymath.Lerp(startR, targetR, _elapsed);
+            var startG = (float)_startValueColor.G;
+            var targetG = (float)_targetValueColor.G;
+            var lerpG = Raymath.Lerp(startG, targetG, _elapsed);
+            var startB = (float)_startValueColor.B;
+            var targetB = (float)_targetValueColor.B;
+            var lerpB = Raymath.Lerp(startB, targetB, _elapsed);
+            var startAlpha = (float)_startValueColor.A;
+            var targetAlpha = (float)_targetValueColor.A;
+            var lerpAlpha = Raymath.Lerp(startAlpha, targetAlpha, _elapsed);
+            
+            var newColorValue = new Color((byte)lerpR, (byte)lerpG, (byte)lerpB, (byte)lerpAlpha);
+            _propertyInfo.SetValue(Component, newColorValue);
         }
         
         _elapsed += Raymath.Clamp(delta / _duration, 0f, 1f);
