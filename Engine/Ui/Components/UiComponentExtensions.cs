@@ -52,7 +52,7 @@ public static class UiComponentExtensions
     public static Tween TweenColor(this UiComponent component, Color to, float duration)
     {
         if (component is Button button)
-            return new Tween(button, nameof(button.BackgroundColor), button.BackgroundColor, to, duration);
+            return new Tween(button, button.Texture.HasValue ? nameof(button.TextureTint) : nameof(button.BackgroundColor), button.Texture.HasValue ? button.TextureTint : button.BackgroundColor, to, duration);
         if (component is Label label)
             return new Tween(label, nameof(label.TextColor), label.TextColor, to, duration);
         throw new Exception($"Cannot tween color. Component '{component}' is not the correct type.");
@@ -61,7 +61,7 @@ public static class UiComponentExtensions
     public static Tween TweenColor(this Tween tween, Color to, float duration)
     {
         if (tween.Component is Button button)
-            return new Tween(button, nameof(button.BackgroundColor), button.BackgroundColor, to, duration);
+            return new Tween(button, button.Texture.HasValue ? nameof(button.TextureTint) : nameof(button.BackgroundColor), button.Texture.HasValue ? button.TextureTint : button.BackgroundColor, to, duration);
         if (tween.Component is Label label)
             return new Tween(label, nameof(label.TextColor), label.TextColor, to, duration);
         throw new Exception($"Cannot tween color. Component '{tween.Component}' is not the correct type.");

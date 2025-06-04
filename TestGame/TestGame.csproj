@@ -26,6 +26,30 @@
       </Content>
       <None Remove="Assets\basic-button.png" />
       <None Remove="Assets\Brawler-Bold.ttf" />
+      <None Remove="Assets\sprite.png" />
+      <Content Include="Assets\sprite.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Wilhelm-Scream.mp3" />
+      <Content Include="Assets\Wilhelm-Scream.mp3">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\wilhelm-scream.ogg" />
+      <Content Include="Assets\wilhelm-scream.ogg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\clean-scream.mp3" />
+      <Content Include="Assets\clean-scream.mp3">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\click1.ogg" />
+      <Content Include="Assets\click1.ogg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\dreams_of_peace_2.ogg" />
+      <Content Include="Assets\dreams_of_peace_2.ogg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

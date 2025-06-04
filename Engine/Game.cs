@@ -49,6 +49,8 @@ public abstract class Game(GameSettings settings) : IDisposable
         }
         TweenSystem.Update(deltaTime);
         UiSystem.Update(deltaTime, SceneManager.CurrentScene);
+        
+        SceneManager.CurrentScene.UpdateInternal(deltaTime);
     }
 
     internal void DrawInternal()
@@ -60,7 +62,7 @@ public abstract class Game(GameSettings settings) : IDisposable
         Raylib.ClearBackground(Settings.ClearColor);
         
         // DRAW GAME COMPONENTS
-        //Raylib.DrawText("Hello, world!", 12, 42, 20, Color.White);
+        SceneManager.CurrentScene.DrawInternal();
 
         // END DRAW GAME COMPONENTS
         
@@ -85,6 +87,7 @@ public abstract class Game(GameSettings settings) : IDisposable
         if (!disposing) return;
 
         UiSystem.Cleanup();
+        AssetManager.UnloadAllAssets();
     }
 
     ~Game()

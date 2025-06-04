@@ -1,5 +1,6 @@
 using Engine.Ui.Components;
 using Raylib_cs;
+using ZLinq;
 
 namespace Engine;
 
@@ -9,8 +10,9 @@ public abstract class Scene(Game game, string name)
     public string Name { get; } = name;
     protected Game Game { get; } = game;
     
-    internal List<UiComponent> UiComponents = [];
-    internal List<IntervalAction> IntervalActions = [];
+    internal readonly List<UiComponent> UiComponents = [];
+    internal readonly List<IntervalAction> IntervalActions = [];
+    internal readonly List<Entity> Entities = [];
     
     protected T AddUiComponent<T>(T component) where T : UiComponent
     {
@@ -18,11 +20,42 @@ public abstract class Scene(Game game, string name)
         return component;
     }
 
-    protected void RemoveUiComponent(UiComponent component) => UiComponents.Remove(component);
+    protected void RemoveUiComponent<T>(T component) where T : UiComponent => UiComponents.Remove(component);
+    
+    protected T AddEntity<T>(T entity) where T : Entity
+    {
+        Entities.Add(entity);
+        return entity;
+    }
+
+    protected void RemoveEntity<T>(T entity) where T : Entity => Entities.Remove(entity);
+
+    protected List<T> GetEntitiesOfType<T>() where T : Entity =>
+        Entities.AsValueEnumerable().Where(p => p is T && p.Active)
+            .Cast<T>()
+            .ToList(); 
     
     protected internal abstract void Initialize();
     protected internal virtual void Activated() { }
     protected internal virtual void Deactivated() { }
+
+    internal void UpdateInternal(float deltaTime)
+    {
+        foreach (var entity in Entities.AsValueEnumerable().Where(p => p.Active))
+        {
+            entity.UpdateInternal(deltaTime);
+            entity.Update(deltaTime);
+        }
+    }
+    
+    internal void DrawInternal()
+    {
+        foreach (var entity in Entities.AsValueEnumerable().Where(p => p.Active))
+        {
+            entity.DrawInternal();
+        }
+    }
+    
     protected internal virtual void Update(float deltaTime) { }
 
     protected void RunAtInterval(Action action, float delaySeconds)

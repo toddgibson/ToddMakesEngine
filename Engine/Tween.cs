@@ -115,21 +115,8 @@ public class Tween
         }
         else if (_propertyInfo.PropertyType == typeof(Color))
         {
-            var startR = (float)_startValueColor.R;
-            var targetR = (float)_targetValueColor.R;
-            var lerpR = Raymath.Lerp(startR, targetR, _elapsed);
-            var startG = (float)_startValueColor.G;
-            var targetG = (float)_targetValueColor.G;
-            var lerpG = Raymath.Lerp(startG, targetG, _elapsed);
-            var startB = (float)_startValueColor.B;
-            var targetB = (float)_targetValueColor.B;
-            var lerpB = Raymath.Lerp(startB, targetB, _elapsed);
-            var startAlpha = (float)_startValueColor.A;
-            var targetAlpha = (float)_targetValueColor.A;
-            var lerpAlpha = Raymath.Lerp(startAlpha, targetAlpha, _elapsed);
-            
-            var newColorValue = new Color((byte)lerpR, (byte)lerpG, (byte)lerpB, (byte)lerpAlpha);
-            _propertyInfo.SetValue(Component, newColorValue);
+            var newValue = Raylib.ColorLerp(_startValueColor, _targetValueColor, _elapsed);
+            _propertyInfo.SetValue(Component, newValue);
         }
         
         _elapsed += Raymath.Clamp(delta / _duration, 0f, 1f);
