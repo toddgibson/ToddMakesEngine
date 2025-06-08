@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Reflection;
+using Engine.Components2D;
 using Engine.Logging;
 using Engine.Systems;
 using Engine.Ui.Components;
@@ -9,7 +10,8 @@ namespace Engine;
 
 public class Tween
 {
-    public UiComponent Component { get; }
+    public UiComponent? UiComponent { get; }
+    public Component2D? Component2D { get; }
     private readonly string _propertyName;
     private readonly float _startValue;
     private readonly float _targetValue;
@@ -26,19 +28,19 @@ public class Tween
 
     private readonly PropertyInfo? _propertyInfo;
 
-    public Tween(UiComponent component, string propertyName, float startValue, float targetValue, float duration)
+    public Tween(Component2D component2D, string propertyName, float startValue, float targetValue, float duration)
     {
-        Component = component;
+        Component2D = component2D;
         _propertyName = propertyName;
         _startValue = startValue;
         _targetValue = targetValue;
         _duration = duration;
 
-        _propertyInfo = Component.GetType().GetProperty(_propertyName);
+        _propertyInfo = Component2D.GetType().GetProperty(_propertyName);
 
         if (_propertyInfo == null)
         {
-            Log.Warning($"{component.GetType().Name}.{_propertyName} property could not be found");
+            Log.Warning($"{component2D.GetType().Name}.{_propertyName} property could not be found");
             return;
         }
         
@@ -48,19 +50,19 @@ public class Tween
         TweenSystem.StartTween(this);
     }
     
-    public Tween(UiComponent component, string propertyName, Vector2 startValue, Vector2 targetValue, float duration)
+    public Tween(Component2D component2D, string propertyName, Vector2 startValue, Vector2 targetValue, float duration)
     {
-        Component = component;
+        Component2D = component2D;
         _propertyName = propertyName;
         _startValueVector2 = startValue;
         _targetValueVector2 = targetValue;
         _duration = duration;
 
-        _propertyInfo = Component.GetType().GetProperty(_propertyName);
+        _propertyInfo = Component2D.GetType().GetProperty(_propertyName);
 
         if (_propertyInfo == null)
         {
-            Log.Warning($"{component.GetType().Name}.{_propertyName} property could not be found");
+            Log.Warning($"{component2D.GetType().Name}.{_propertyName} property could not be found");
             return;
         }
         
@@ -70,19 +72,85 @@ public class Tween
         TweenSystem.StartTween(this);
     }
     
-    public Tween(UiComponent component, string propertyName, Color startValue, Color targetValue, float duration)
+    public Tween(Component2D component2D, string propertyName, Color startValue, Color targetValue, float duration)
     {
-        Component = component;
+        Component2D = component2D;
         _propertyName = propertyName;
         _startValueColor = startValue;
         _targetValueColor = targetValue;
         _duration = duration;
 
-        _propertyInfo = Component.GetType().GetProperty(_propertyName);
+        _propertyInfo = Component2D.GetType().GetProperty(_propertyName);
 
         if (_propertyInfo == null)
         {
-            Log.Warning($"{component.GetType().Name}.{_propertyName} property could not be found");
+            Log.Warning($"{component2D.GetType().Name}.{_propertyName} property could not be found");
+            return;
+        }
+        
+        if (TweenSystem.LoggingEnabled)
+            Log.Info($"Tween {propertyName} from {startValue} to {targetValue} with {duration}s duration");
+        
+        TweenSystem.StartTween(this);
+    }
+    
+    public Tween(UiComponent uiComponent, string propertyName, float startValue, float targetValue, float duration)
+    {
+        UiComponent = uiComponent;
+        _propertyName = propertyName;
+        _startValue = startValue;
+        _targetValue = targetValue;
+        _duration = duration;
+
+        _propertyInfo = UiComponent.GetType().GetProperty(_propertyName);
+
+        if (_propertyInfo == null)
+        {
+            Log.Warning($"{uiComponent.GetType().Name}.{_propertyName} property could not be found");
+            return;
+        }
+        
+        if (TweenSystem.LoggingEnabled)
+            Log.Info($"Tween {propertyName} from {startValue} to {targetValue} with {duration}s duration");
+        
+        TweenSystem.StartTween(this);
+    }
+    
+    public Tween(UiComponent uiComponent, string propertyName, Vector2 startValue, Vector2 targetValue, float duration)
+    {
+        UiComponent = uiComponent;
+        _propertyName = propertyName;
+        _startValueVector2 = startValue;
+        _targetValueVector2 = targetValue;
+        _duration = duration;
+
+        _propertyInfo = UiComponent.GetType().GetProperty(_propertyName);
+
+        if (_propertyInfo == null)
+        {
+            Log.Warning($"{uiComponent.GetType().Name}.{_propertyName} property could not be found");
+            return;
+        }
+        
+        if (TweenSystem.LoggingEnabled)
+            Log.Info($"Tween {propertyName} from {startValue} to {targetValue} with {duration}s duration");
+        
+        TweenSystem.StartTween(this);
+    }
+    
+    public Tween(UiComponent uiComponent, string propertyName, Color startValue, Color targetValue, float duration)
+    {
+        UiComponent = uiComponent;
+        _propertyName = propertyName;
+        _startValueColor = startValue;
+        _targetValueColor = targetValue;
+        _duration = duration;
+
+        _propertyInfo = UiComponent.GetType().GetProperty(_propertyName);
+
+        if (_propertyInfo == null)
+        {
+            Log.Warning($"{uiComponent.GetType().Name}.{_propertyName} property could not be found");
             return;
         }
         
@@ -103,22 +171,43 @@ public class Tween
         if (Finished)
             return;
 
-        if (_propertyInfo.PropertyType == typeof(float))
+        if (UiComponent != null)
         {
-            var newValue = Raymath.Lerp(_startValue, _targetValue, _elapsed);
-            _propertyInfo.SetValue(Component, newValue);
+            if (_propertyInfo.PropertyType == typeof(float))
+            {
+                var newValue = Raymath.Lerp(_startValue, _targetValue, _elapsed);
+                _propertyInfo.SetValue(UiComponent, newValue);
+            }
+            else if (_propertyInfo.PropertyType == typeof(Vector2))
+            {
+                var newValue = Raymath.Vector2Lerp(_startValueVector2, _targetValueVector2, _elapsed);
+                _propertyInfo.SetValue(UiComponent, newValue);
+            }
+            else if (_propertyInfo.PropertyType == typeof(Color))
+            {
+                var newValue = Raylib.ColorLerp(_startValueColor, _targetValueColor, _elapsed);
+                _propertyInfo.SetValue(UiComponent, newValue);
+            }
         }
-        else if (_propertyInfo.PropertyType == typeof(Vector2))
+        else if (Component2D != null)
         {
-            var newValue = Raymath.Vector2Lerp(_startValueVector2, _targetValueVector2, _elapsed);
-            _propertyInfo.SetValue(Component, newValue);
+            if (_propertyInfo.PropertyType == typeof(float))
+            {
+                var newValue = Raymath.Lerp(_startValue, _targetValue, _elapsed);
+                _propertyInfo.SetValue(Component2D, newValue);
+            }
+            else if (_propertyInfo.PropertyType == typeof(Vector2))
+            {
+                var newValue = Raymath.Vector2Lerp(_startValueVector2, _targetValueVector2, _elapsed);
+                _propertyInfo.SetValue(Component2D, newValue);
+            }
+            else if (_propertyInfo.PropertyType == typeof(Color))
+            {
+                var newValue = Raylib.ColorLerp(_startValueColor, _targetValueColor, _elapsed);
+                _propertyInfo.SetValue(Component2D, newValue);
+            }
         }
-        else if (_propertyInfo.PropertyType == typeof(Color))
-        {
-            var newValue = Raylib.ColorLerp(_startValueColor, _targetValueColor, _elapsed);
-            _propertyInfo.SetValue(Component, newValue);
-        }
-        
+
         _elapsed += Raymath.Clamp(delta / _duration, 0f, 1f);
 
         if (!(_elapsed >= 1.0f)) return;
@@ -136,16 +225,16 @@ public class Tween
         if (_propertyInfo.PropertyType == typeof(float))
         {
             finalTargetValue = _targetValue;
-            _propertyInfo.SetValue(Component, _targetValue);
+            _propertyInfo.SetValue(UiComponent, _targetValue);
         }
         else if (_propertyInfo.PropertyType == typeof(Vector2))
         {
             finalTargetValue = _targetValueVector2;
-            _propertyInfo.SetValue(Component, _targetValueVector2);
+            _propertyInfo.SetValue(UiComponent, _targetValueVector2);
         }
             
         if (TweenSystem.LoggingEnabled)
-            Log.Info($"Tween {_propertyName} ending value: {_propertyInfo.GetValue(Component)}, Target value: {finalTargetValue}");
+            Log.Info($"Tween {_propertyName} ending value: {_propertyInfo.GetValue(UiComponent)}, Target value: {finalTargetValue}");
         
         FinishedAction?.Invoke();
     }

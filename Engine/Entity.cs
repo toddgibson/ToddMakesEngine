@@ -15,11 +15,11 @@ public class Entity(string name)
     
     internal readonly List<Component2D> Component2Ds = [];
     
-    public T AddComponent2D<T>(T component) where T : Component2D
+    public Entity AddComponent2D<T>(T component) where T : Component2D
     {
         component.SetEntity(this);
         Component2Ds.Add(component);
-        return component;
+        return this;
     }
 
     public void RemoveComponent2D(Component2D component) => Component2Ds.Remove(component);
@@ -28,6 +28,11 @@ public class Entity(string name)
         Component2Ds.AsValueEnumerable().Where(p => p is T && p.Active)
             .Cast<T>()
             .FirstOrDefault(); 
+    
+    public List<T> GetComponentsOfType<T>() where T : Component2D =>
+        Component2Ds.AsValueEnumerable().Where(p => p is T && p.Active)
+            .Cast<T>()
+            .ToList(); 
 
     internal void UpdateInternal(float deltaTime)
     {

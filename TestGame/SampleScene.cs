@@ -34,7 +34,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         // with a sprite component and a sound player component
         AddEntity(new Entity("Entity1")
             {
-                Position = new Vector2(-300, 100)
+                Position = new Vector2(400, 400)
             })
             .AddComponent2D(new Sprite()
             {
@@ -42,7 +42,18 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
                 Mode = SpriteMode.Framed,
                 FrameSize = Vector2.One * 16,
                 CurrentFrame = 0,
-                LocalPosition = new Vector2(400, 300),
+                LocalPosition = Vector2.Zero,
+                PivotPoint = new Vector2(0.5f * 16, 0.5f * 16),
+                Size = new Vector2(16, 16),
+                Scale = Vector2.One * 3
+            })
+            .AddComponent2D(new Sprite()
+            {
+                Texture = spriteTexture,
+                Mode = SpriteMode.Framed,
+                FrameSize = Vector2.One * 16,
+                CurrentFrame = 1,
+                LocalPosition = new Vector2(16, 0) * 3,
                 PivotPoint = new Vector2(0.5f * 16, 0.5f * 16),
                 Size = new Vector2(16, 16),
                 Scale = Vector2.One * 3
@@ -83,6 +94,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         if (spriteEntity != null)
         {
             spriteEntity.GetComponentOfType<Sprite>()!.CurrentFrame += 1;
+            spriteEntity.GetComponentsOfType<Sprite>()[1].TweenColorTint(ColorHelpers.GetRandomColor(), 1.0f);
         }
     }
 
@@ -135,5 +147,8 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
             _labelVelocity *= new Vector2(-1, 1);
         if (_label.Position.Y >= Game.Settings.ScreenHeight || _label.Position.Y < 0)
             _labelVelocity *= new Vector2(1, -1);
+        
+        var entity = GetEntitiesOfType<Entity>().FirstOrDefault();
+        entity.Position = _label.Position;
     }
 }
