@@ -17,6 +17,6 @@ public class SampleGame(GameSettings settings) : Game(settings)
         AddScene(sampleScene, true);
         AddScene(sampleScene2);
 
-        DisplayFps = true;
+        DisplayFrameData = true;
     }
 }

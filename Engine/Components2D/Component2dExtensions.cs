@@ -50,4 +50,15 @@ public static class Component2dExtensions
         
         throw new Exception($"Cannot tween color. Component '{tween.Component2D}' is not the correct type.");
     }
+
+    public static bool IsWithinScreenBounds(this Component2D component, int screenWidth, int screenHeight)
+    {
+        if (component.GlobalPosition.X + (component.Size.X * 0.5f) < 0
+            || component.GlobalPosition.X - (component.Size.X * 0.5f) > screenWidth
+            || component.GlobalPosition.Y + (component.Size.Y * 0.5f) < 0
+            || component.GlobalPosition.Y - (component.Size.Y * 0.5f) > screenHeight)
+            return false;
+        
+        return true;
+    }
 }

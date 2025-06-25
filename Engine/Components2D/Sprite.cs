@@ -19,6 +19,11 @@ public enum SpriteMode
 
 public class Sprite : Component2D
 {
+    public Sprite()
+    {
+        DrawLayer = 1;
+    }
+    
     private Rectangle _drawRect;
     private int _currentFrame = 0;
     public Texture2D Texture { get; set; }

@@ -43,10 +43,4 @@ public class Entity(string name)
     }
     
     public virtual void Update(float deltaTime) { }
-    
-    internal void DrawInternal()
-    {
-        foreach (var component in Component2Ds.AsValueEnumerable().Where(p => p.Active))
-            component.Draw();
-    }
 }

@@ -9,6 +9,7 @@ public class Component2D
     
     public Vector2 LocalPosition { get; set; }
     public Vector2 GlobalPosition => Entity.Position + LocalPosition;
+    public uint DrawLayer { get; set; }
     public Vector2 Scale { get; set; } = Vector2.One;
     public float LocalRotation { get; set; }
     public float GlobalRotation => Entity.Rotation + LocalRotation;

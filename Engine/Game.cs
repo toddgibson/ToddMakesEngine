@@ -1,4 +1,6 @@
 using System.Data;
+using System.Diagnostics;
+using System.Runtime.InteropServices.JavaScript;
 using Engine.Systems;
 using Raylib_cs;
 using ZLinq;
@@ -10,7 +12,15 @@ public abstract class Game(GameSettings settings) : IDisposable
     public readonly GameSettings Settings = settings;
     public readonly SceneManager SceneManager = new();
     
-    public bool DisplayFps = false;
+    public bool DisplayFrameData = false;
+
+#if DEBUG
+    private readonly List<double> _frameDrawTimes = [];
+    private double AverageFrameDrawTime => _frameDrawTimes.Average();
+    private readonly List<double> _frameUpdateTimes = [];
+    private double AverageFrameUpdateTime => _frameUpdateTimes.Average();
+    private double AverageFrameTime => AverageFrameDrawTime +  AverageFrameUpdateTime;
+#endif
 
     internal void InitializeInternal()
     {
@@ -53,6 +63,10 @@ public abstract class Game(GameSettings settings) : IDisposable
         SceneManager.CurrentScene.UpdateInternal(deltaTime);
     }
 
+#if DEBUG
+    private readonly Stopwatch _frameTimer = new();
+#endif
+    
     internal void DrawInternal()
     {
         if (SceneManager.CurrentScene is null)
@@ -62,16 +76,45 @@ public abstract class Game(GameSettings settings) : IDisposable
         Raylib.ClearBackground(Settings.ClearColor);
         
         // DRAW GAME COMPONENTS
+#if DEBUG
+        _frameTimer.Restart();
+#endif
+        
         SceneManager.CurrentScene.DrawInternal();
-
+        
+#if DEBUG
+        _frameTimer.Stop();
+        _frameDrawTimes.Add(_frameTimer.Elapsed.TotalMicroseconds / 1000);
+        if (_frameDrawTimes.Count > 100)
+            _frameDrawTimes.RemoveAt(0);
+#endif
         // END DRAW GAME COMPONENTS
         
         // DRAW UI
-        UiSystem.Draw(SceneManager.CurrentScene);
-        // END DRAW UI
+#if DEBUG
+        _frameTimer.Restart();
+#endif
         
-        if (DisplayFps)
+        UiSystem.Draw(SceneManager.CurrentScene);
+        
+#if DEBUG
+        _frameTimer.Stop();
+        _frameUpdateTimes.Add(_frameTimer.Elapsed.TotalMicroseconds / 1000);
+        if (_frameUpdateTimes.Count > 100)
+            _frameUpdateTimes.RemoveAt(0);
+#endif
+        // END DRAW UI
+
+        if (DisplayFrameData)
+        {
             Raylib.DrawFPS(12, 12);
+            
+#if DEBUG
+            Raylib.DrawText($"Avg. Frame Time: {AverageFrameTime:0.000}ms, Draw: {AverageFrameDrawTime:0.000}ms, Update: {AverageFrameUpdateTime:0.000}ms", 12, 32, Raylib.GetFontDefault().BaseSize, Color.DarkGreen);
+            Raylib.DrawText($"Memory Usage: {Process.GetCurrentProcess().WorkingSet64 / (1024.0 * 1024.0):F2}mb", 12, 48, Raylib.GetFontDefault().BaseSize, Color.DarkGreen);
+            Raylib.DrawText($"Heap Allocation: {GC.GetTotalMemory(false) / (1024.0 * 1024.0):F2}mb", 12, 64, Raylib.GetFontDefault().BaseSize, Color.DarkGreen);
+#endif
+        }
         
         Raylib.EndDrawing();
     }

@@ -1,3 +1,4 @@
+using Engine.Components2D;
 using Engine.Ui.Components;
 using Raylib_cs;
 using ZLinq;
@@ -13,6 +14,7 @@ public abstract class Scene(Game game, string name)
     internal readonly List<UiComponent> UiComponents = [];
     internal readonly List<IntervalAction> IntervalActions = [];
     internal readonly List<Entity> Entities = [];
+
     
     protected T AddUiComponent<T>(T component) where T : UiComponent
     {
@@ -50,10 +52,17 @@ public abstract class Scene(Game game, string name)
     
     internal void DrawInternal()
     {
-        foreach (var entity in Entities.AsValueEnumerable().Where(p => p.Active))
-        {
-            entity.DrawInternal();
-        }
+        var sortedComponents = Entities
+            .AsValueEnumerable()
+            .Where(p => p.Active)
+            .SelectMany(p => p.Component2Ds)
+            .Where(p => p.Active 
+                        && p.IsWithinScreenBounds(Game.Settings.ScreenWidth, Game.Settings.ScreenHeight))
+            .OrderBy(p => p.DrawLayer)
+            .ThenBy(p => p.GlobalPosition.Y);
+        
+        foreach (var component2d in sortedComponents)
+            component2d.Draw();
     }
     
     protected internal virtual void Update(float deltaTime) { }
