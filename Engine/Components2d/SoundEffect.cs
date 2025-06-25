@@ -1,8 +1,8 @@
 using Raylib_cs;
 
-namespace Engine.Components2D;
+namespace Engine.Components2d;
 
-public class SoundEffect : Component2D
+public class SoundEffect : Component2d
 {
     public Sound Sound { get; }
     public float Volume { get; }

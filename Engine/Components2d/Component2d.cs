@@ -1,9 +1,9 @@
 using System.Numerics;
 using Raylib_cs;
 
-namespace Engine.Components2D;
+namespace Engine.Components2d;
 
-public class Component2D
+public class Component2d
 {
     protected Entity Entity { get; private set; }
     

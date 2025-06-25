@@ -1,8 +1,8 @@
 using Raylib_cs;
 
-namespace Engine.Components2D;
+namespace Engine.Components2d;
 
-public class Song : Component2D
+public class Song : Component2d
 {
     public bool Loop { get; }
     public Music Music { get; }

@@ -1,7 +1,7 @@
 using System.Numerics;
 using Raylib_cs;
 
-namespace Engine.Components2D;
+namespace Engine.Components2d;
 
 public enum CollisionShape2D
 {
@@ -17,7 +17,7 @@ public enum SpriteMode
     Framed
 }
 
-public class Sprite : Component2D
+public class Sprite : Component2d
 {
     public Sprite()
     {

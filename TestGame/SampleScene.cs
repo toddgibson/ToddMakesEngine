@@ -1,6 +1,6 @@
 using System.Numerics;
 using Engine;
-using Engine.Components2D;
+using Engine.Components2d;
 using Engine.Extensions;
 using Engine.Logging;
 using Engine.Systems;
