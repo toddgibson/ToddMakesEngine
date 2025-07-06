@@ -6,23 +6,26 @@ namespace Engine.Ui.Components;
 
 public class Label : UiComponent
 {
-    public Label(string text)
+    public Label(string name, string text)
     {
+        Name = name;
         Text = text;
         Size = Raylib.MeasureTextEx(Font, Text, FontSize, FontSpacing);
         PivotPoint = new Vector2(Size.X * 0.5f, Size.Y * 0.5f);
     }
     
-    public Label(string text, Color color)
+    public Label(string name, string text, Color color)
     {
+        Name = name;
         Text = text;
         TextColor = color;
         Size = Raylib.MeasureTextEx(Font, Text, FontSize, FontSpacing);
         PivotPoint = new Vector2(Size.X * 0.5f, Size.Y * 0.5f);
     }
     
-    public Label(string text, Color color, Font font)
+    public Label(string name, string text, Color color, Font font)
     {
+        Name = name;
         Text = text;
         TextColor = color;
         Font = font;

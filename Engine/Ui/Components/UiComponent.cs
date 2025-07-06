@@ -23,6 +23,7 @@ public abstract class TexturedUiComponent : UiComponent
 
 public abstract class UiComponent
 {
+    public string Name { get; set; } = Guid.NewGuid().ToString();
     public bool Active { get; set; } = true;
     public Vector2 Size { get; set; } = new(64, 64);
     public Vector2 Position { get; set; }

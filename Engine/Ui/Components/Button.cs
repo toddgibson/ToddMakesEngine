@@ -13,8 +13,9 @@ public class Button : TexturedUiComponent
         Size = Texture.HasValue ? new Vector2(Texture.Value.Width, Texture.Value.Height) : new Vector2(150, 40);
     }
     
-    public Button(string text, Func<Button, Task> clickFunc) : this()
+    public Button(string name, string text, Func<Button, Task> clickFunc) : this()
     {
+        Name = name;
         Texture = UiSystem.DefaultButtonTexture;
         PivotPoint = new Vector2(Texture.Value.Width * 0.5f, Texture.Value.Height * 0.5f);
         Text = text;
@@ -22,8 +23,9 @@ public class Button : TexturedUiComponent
         OnClick += clickFunc;
     }
 
-    public Button(Texture2D backgroundTexture, string text, Font font, Func<Button, Task> clickFunc) : this()
+    public Button(string name, Texture2D backgroundTexture, string text, Font font, Func<Button, Task> clickFunc) : this()
     {
+        Name = name;
         Texture = backgroundTexture;
         PivotPoint = new Vector2(Texture.Value.Width * 0.5f, Texture.Value.Height * 0.5f);
         Font = font;

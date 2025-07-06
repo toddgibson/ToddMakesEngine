@@ -25,8 +25,8 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
     
     protected override void Initialize()
     {
-        AddUiComponent(new Button(Name == "SampleScene" ? "Spin Me!" : "Whoa Dude!", HandleButtonClickAsync));
-        _label = AddUiComponent(new Label("Hello World!"));
+        AddUiComponent(new Button("btnSpin", Name == "SampleScene" ? "Spin Me!" : "Whoa Dude!", HandleButtonClickAsync));
+        _label = AddUiComponent(new Label("lblHello", "Hello World!"));
 
         var spriteTexture = AssetManager.GetTexture("adventurers");
         var scream = AssetManager.GetSound("scream");
@@ -162,7 +162,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
     protected override void Update(float deltaTime)
     {
         if (UiSystem.IsCursorHoveringUi)
-            Log.Info(deltaTime, ConsoleColor.DarkMagenta);
+            Log.Info($"Hovering: {UiSystem.HoveredUiComponent?.Name} - {deltaTime}", ConsoleColor.DarkMagenta);
 
         _label.Position += deltaTime * _labelSpeed * _labelVelocity;
         

@@ -9,7 +9,8 @@ public static class UiSystem
 {
     public static Font DefaultFont { get; private set; }
     public static Texture2D DefaultButtonTexture { get; private set; }
-    public static bool IsCursorHoveringUi { get; private set; }
+    public static bool IsCursorHoveringUi => HoveredUiComponent != null;
+    public static UiComponent? HoveredUiComponent { get; private set; }
 
     internal static void Initialize()
     {
@@ -30,12 +31,12 @@ public static class UiSystem
 
     internal static void Update(float delta, Scene scene)
     {
-        IsCursorHoveringUi = false;
+        HoveredUiComponent = null;
         foreach (var component in scene.UiComponents.AsValueEnumerable().Where(p => p.Active))
         {
             component.Update(delta);
             if (component.IsHovered)
-                IsCursorHoveringUi = true;
+                HoveredUiComponent = component;
         }
     }
 

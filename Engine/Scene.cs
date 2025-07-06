@@ -22,6 +22,8 @@ public abstract class Scene(Game game, string name)
         return component;
     }
 
+    protected UiComponent? GetUiComponentByName(string name) => UiComponents.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
     protected void RemoveUiComponent<T>(T component) where T : UiComponent => UiComponents.Remove(component);
     
     protected T AddEntity<T>(T entity) where T : Entity
