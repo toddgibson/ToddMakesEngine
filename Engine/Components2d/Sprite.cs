@@ -19,9 +19,30 @@ public enum SpriteMode
 
 public class Sprite : Component2d
 {
+    private Shader _outlineShader;
+    
     public Sprite()
     {
         DrawLayer = 1;
+    }
+
+    public Sprite(bool enableOutlineShader)
+    {
+        DrawLayer = 1;
+        EnableOutlineShader = enableOutlineShader;
+        
+        if (EnableOutlineShader)
+        {
+            _outlineShader = Raylib.LoadShader(null, "Assets/Shaders/outline.frag");
+            
+            int locResolution = Raylib.GetShaderLocation(_outlineShader, "resolution");
+            int locThickness = Raylib.GetShaderLocation(_outlineShader, "thickness");
+            int locOutlineColor = Raylib.GetShaderLocation(_outlineShader, "outlineColor");
+
+            // Set default values that will be updated in Draw method
+            Raylib.SetShaderValue(_outlineShader, locThickness, 1f, ShaderUniformDataType.Float);
+            Raylib.SetShaderValue(_outlineShader, locOutlineColor, new Vector4(1, 1, 1, 1), ShaderUniformDataType.Vec4);
+        }
     }
     
     private Rectangle _drawRect;
@@ -30,6 +51,8 @@ public class Sprite : Component2d
     public Color Tint { get; set; } = Color.White;
     public SpriteMode Mode { get; set; } = SpriteMode.Single;
     public Vector2 FrameSize { get; set; } = Vector2.NaN;
+    
+    public bool EnableOutlineShader { get; set; }
 
     public int CurrentFrame
     {
@@ -51,7 +74,21 @@ public class Sprite : Component2d
 
     internal override void Draw()
     {
+        if (EnableOutlineShader)
+        {
+            // Update resolution with actual texture dimensions
+            int locResolution = Raylib.GetShaderLocation(_outlineShader, "resolution");
+            Raylib.SetShaderValue(_outlineShader, locResolution, new Vector2(Texture.Width, Texture.Height), ShaderUniformDataType.Vec2);
+
+            Raylib.BeginShaderMode(_outlineShader);
+        }
+
         _drawRect = new Rectangle(WorldRectangle.X + PivotPoint.X, WorldRectangle.Y + PivotPoint.Y, WorldRectangle.Width, WorldRectangle.Height);
-        Raylib.DrawTexturePro(Texture, new Rectangle(CurrentFrame * _frameWidth, CurrentFrame * _frameHeight, _frameWidth, _frameHeight), _drawRect, PivotPoint, LocalRotation, Tint);
+        Raylib.DrawTexturePro(Texture, new Rectangle(CurrentFrame * _frameWidth, 0, _frameWidth, _frameHeight), _drawRect, PivotPoint, LocalRotation, Tint);
+
+        if (EnableOutlineShader)
+        {
+            Raylib.EndShaderMode();
+        }
     }
 }

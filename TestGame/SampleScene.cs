@@ -5,6 +5,7 @@ using Engine.Extensions;
 using Engine.Logging;
 using Engine.Systems;
 using Engine.Ui.Components;
+using Engine.Utilities;
 using Random = Engine.Random;
 
 namespace TestGame;
@@ -20,6 +21,8 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
     private Vector2 _labelVelocity = Vector2.One;
     private float _labelSpeed = 100f;
     
+    private Grid _grid;
+    
     protected override void Initialize()
     {
         AddUiComponent(new Button(Name == "SampleScene" ? "Spin Me!" : "Whoa Dude!", HandleButtonClickAsync));
@@ -29,14 +32,16 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         var scream = AssetManager.GetSound("scream");
         _soundEffect = new SoundEffect(scream);
         _song = new Song(AssetManager.GetSong("peace"));
+        
+        _grid = new Grid(new Vector2(8, 8), 16 * 3);
 
         // add entity...
         // with a sprite component and a sound player component
-        AddEntity(new Entity("Entity1")
+        var e = AddEntity(new Entity("Entity1")
             {
                 Position = new Vector2(400, 400)
             })
-            .AddComponent2D(new Sprite()
+            .AddComponent2D(new Sprite(true)
             {
                 Texture = spriteTexture,
                 Mode = SpriteMode.Framed,
@@ -45,9 +50,10 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
                 LocalPosition = Vector2.Zero,
                 PivotPoint = new Vector2(0.5f * 16, 0.5f * 16),
                 Size = new Vector2(16, 16),
-                Scale = Vector2.One * 3
+                Scale = Vector2.One * 3,
+                DrawLayer = 999
             })
-            .AddComponent2D(new Sprite()
+            .AddComponent2D(new Sprite(false)
             {
                 Texture = spriteTexture,
                 Mode = SpriteMode.Framed,
@@ -56,8 +62,23 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
                 LocalPosition = new Vector2(16, 0) * 3,
                 PivotPoint = new Vector2(0.5f * 16, 0.5f * 16),
                 Size = new Vector2(16, 16),
+                Scale = Vector2.One * 3,
+                DrawLayer = 999
+            });
+        for (var i = 0; i < 10000; i++)
+        {
+            e.AddComponent2D(new Sprite()
+            {
+                Texture = spriteTexture,
+                Mode = SpriteMode.Framed,
+                FrameSize = Vector2.One * 16,
+                CurrentFrame = Random.Range(0, 4),
+                LocalPosition = Random.Vector2(-250, 250),
+                PivotPoint = new Vector2(0.5f * 16, 0.5f * 16),
+                Size = new Vector2(16, 16),
                 Scale = Vector2.One * 3
             });
+        }
     }
 
     protected override void Activated()
@@ -65,7 +86,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         Log.Info($"Scene {Name} activated!", ConsoleColor.DarkGreen);
         SceneManager.SceneChanged += HandleSceneChanged;
         
-        _song.Play();
+        //_song.Play();
         
         if (Name == "SampleScene")
             RunAtInterval(Simulation, 2);
@@ -100,11 +121,13 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
 
     private Task HandleButtonClickAsync(Button button)
     {
-        var toPosition = new Vector2(Random.Range(-(Game.Settings.ScreenWidth/2), Game.Settings.ScreenWidth/2), Random.Range(-(Game.Settings.ScreenHeight/2), Game.Settings.ScreenHeight/2));
+        var toPosition = new Vector2(
+            Random.Range(-(Game.Settings.ScreenWidth/2), Game.Settings.ScreenWidth/2), 
+            Random.Range(-(Game.Settings.ScreenHeight/2), Game.Settings.ScreenHeight/2));
 
         Log.Info($"Move to {toPosition}, Anchor {button.AnchorPoint}");
         
-        _soundEffect.Play();
+        //_soundEffect.Play();
         
         var newColor = ColorHelpers.GetRandomColor();
         button
@@ -150,5 +173,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         
         var entity = GetEntitiesOfType<Entity>().FirstOrDefault();
         entity.Position = _label.Position;
+
+        entity.GetComponentsOfType<Sprite>().ElementAt(Random.Range(0, entity.ComponentCount - 1)).DrawLayer++;
     }
 }

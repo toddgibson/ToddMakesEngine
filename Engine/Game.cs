@@ -80,6 +80,7 @@ public abstract class Game(GameSettings settings) : IDisposable
         _frameTimer.Restart();
 #endif
         
+        GridSystem.DrawInternal();
         SceneManager.CurrentScene.DrawInternal();
         
 #if DEBUG

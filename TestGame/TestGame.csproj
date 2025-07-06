@@ -56,4 +56,10 @@
       <ProjectReference Include="..\Engine\Engine.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="Assets\Shaders\outline.frag">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>

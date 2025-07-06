@@ -1,3 +1,4 @@
+using System.Numerics;
 using Raylib_cs;
 
 namespace Engine;
@@ -33,4 +34,11 @@ public static class Random
     /// <param name="max"></param>
     /// <returns></returns>
     public static byte Byte() => (byte)Raylib.GetRandomValue(0, 255);
+
+    public static Vector2 Vector2(float minXY, float maxXY)
+    {
+        var x = Range(minXY, maxXY);
+        var y = Range(minXY, maxXY);
+        return new Vector2(x, y);
+    }
 }

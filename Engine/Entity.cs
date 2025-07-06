@@ -12,7 +12,8 @@ public class Entity(string name)
     public float Rotation { get; set; }
     public Vector2 PivotPoint { get; set; }
     public bool Active { get; set; } = true;
-    
+    public int ComponentCount => Component2Ds.Count;
+
     internal readonly List<Component2d> Component2Ds = [];
     
     public Entity AddComponent2D<T>(T component) where T : Component2d
