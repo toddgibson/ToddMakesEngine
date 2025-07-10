@@ -29,6 +29,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
 
         var spriteTexture = AssetManager.GetTexture("adventurers");
         var scream = AssetManager.GetSound("scream");
+        var tileTexture = AssetManager.GetTexture("test-tile");
         _soundEffect = new SoundEffect(scream);
         _song = new Song(AssetManager.GetSong("peace"));
         
@@ -63,8 +64,16 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
                 Size = new Vector2(16, 16),
                 Scale = Vector2.One * 3,
                 DrawLayer = 999
-            })
+            });
+            
+        var gridEntity = AddEntity(new Entity("GridEntity")) 
             .AddComponent2D(_grid);
+
+        _grid.CalculateCells();
+        foreach (var cell in _grid.Cells)
+        {
+            _grid.SetCellTexture(cell.Coordinate, tileTexture);
+        }
         
         for (var i = 0; i < 10000; i++)
         {

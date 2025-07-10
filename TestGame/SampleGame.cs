@@ -8,6 +8,7 @@ public class SampleGame(GameSettings settings) : Game(settings)
     protected override void Initialize()
     {
         AssetManager.LoadTexture("Assets/sprite.png", "adventurers");
+        AssetManager.LoadTexture("Assets/test-tile.png", "test-tile");
         AssetManager.LoadSound("Assets/clean-scream.mp3", "scream");
         AssetManager.LoadSong("Assets/dreams_of_peace_2.ogg", "peace");
         
