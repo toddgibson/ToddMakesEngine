@@ -33,7 +33,6 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         _soundEffect = new SoundEffect(scream);
         _song = new Song(AssetManager.GetSong("peace"));
         
-        _grid = new Grid(new Vector2(8, 8), 16 * 3);
 
         // add entity...
         // with a sprite component and a sound player component
@@ -66,7 +65,8 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
                 DrawLayer = 999
             });
             
-        var gridEntity = AddEntity(new Entity("GridEntity")) 
+        _grid = new Grid(new Vector2(8, 8), 16 * 3);
+        AddEntity(new Entity("GridEntity")) 
             .AddComponent2D(_grid);
 
         foreach (var cell in _grid.Cells)
