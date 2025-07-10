@@ -16,4 +16,8 @@
       <Content Include="DefaultEngineAssets\Brawler-Bold.ttf" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Utilities\" />
+    </ItemGroup>
+
 </Project>

@@ -5,7 +5,6 @@ using Engine.Extensions;
 using Engine.Logging;
 using Engine.Systems;
 using Engine.Ui.Components;
-using Engine.Utilities;
 using Random = Engine.Random;
 
 namespace TestGame;
@@ -64,7 +63,9 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
                 Size = new Vector2(16, 16),
                 Scale = Vector2.One * 3,
                 DrawLayer = 999
-            });
+            })
+            .AddComponent2D(_grid);
+        
         for (var i = 0; i < 10000; i++)
         {
             e.AddComponent2D(new Sprite()
@@ -174,6 +175,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         var entity = GetEntitiesOfType<Entity>().FirstOrDefault();
         entity.Position = _label.Position;
 
-        entity.GetComponentsOfType<Sprite>().ElementAt(Random.Range(0, entity.ComponentCount - 1)).DrawLayer++;
+        var spriteComponents = entity.GetComponentsOfType<Sprite>();
+        spriteComponents.ElementAt(Random.Range(0, spriteComponents.Count - 1)).DrawLayer++;
     }
 }

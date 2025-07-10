@@ -1,12 +1,10 @@
 using System.Numerics;
-using Engine.Systems;
 using Raylib_cs;
 
-namespace Engine.Utilities;
+namespace Engine.Components2d;
 
-public class Grid
+public class Grid : Component2d
 {
-    public Vector2 Size { get; set; }
     public int CellSize { get; set; }
     public Color BorderColor { get; set; } = Color.RayWhite;
     
@@ -17,17 +15,15 @@ public class Grid
         Size = size;
         CellSize = cellSize;
         BorderColor = borderColor ?? BorderColor;
-        
-        GridSystem.Add(this);
     }
 
-    internal void DrawInternal()
+    internal override void Draw()
     {
         for (var x = 0; x < Size.X; x++)
         {
             for (var y = 0; y < Size.Y; y++)
             {
-                Raylib.DrawRectangleLines(x * CellSize, y *  CellSize, CellSize, CellSize, BorderColor);
+                Raylib.DrawRectangleLines((int)WorldRectangle.X + x * CellSize, (int)WorldRectangle.Y + y *  CellSize, CellSize, CellSize, BorderColor);
             }
         }
     }

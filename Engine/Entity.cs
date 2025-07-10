@@ -28,7 +28,7 @@ public class Entity(string name)
     public T? GetComponentOfType<T>() where T : Component2d =>
         Component2Ds.AsValueEnumerable().Where(p => p is T && p.Active)
             .Cast<T>()
-            .FirstOrDefault(); 
+            .FirstOrDefault();
     
     public List<T> GetComponentsOfType<T>() where T : Component2d =>
         Component2Ds.AsValueEnumerable().Where(p => p is T && p.Active)
