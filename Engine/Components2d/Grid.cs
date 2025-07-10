@@ -23,7 +23,7 @@ public class Grid : Component2d
         {
             for (var y = 0; y < Size.Y; y++)
             {
-                Raylib.DrawRectangleLines((int)WorldRectangle.X + x * CellSize, (int)WorldRectangle.Y + y *  CellSize, CellSize, CellSize, BorderColor);
+                Raylib.DrawRectangleLines((int)(WorldRectangle.X + x * CellSize * Scale.X), (int)(WorldRectangle.Y + y * CellSize * Scale.Y), (int)(CellSize * Scale.X), (int)(CellSize * Scale.Y), BorderColor);
             }
         }
     }
