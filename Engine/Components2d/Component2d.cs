@@ -19,6 +19,7 @@ public class Component2d
     
     public CollisionShape2D CollisionShape { get; set; } = CollisionShape2D.None;
 
+    internal virtual void Initialize() { }
     internal virtual void Update(float deltaTime) { }
     internal virtual void Draw() { }
     internal void SetEntity(Entity entity) => Entity = entity;

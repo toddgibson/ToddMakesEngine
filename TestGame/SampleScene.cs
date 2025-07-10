@@ -69,7 +69,6 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         var gridEntity = AddEntity(new Entity("GridEntity")) 
             .AddComponent2D(_grid);
 
-        _grid.CalculateCells();
         foreach (var cell in _grid.Cells)
         {
             _grid.SetCellTexture(cell.Coordinate, tileTexture);

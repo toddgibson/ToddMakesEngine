@@ -20,6 +20,7 @@ public class Entity(string name)
     {
         component.SetEntity(this);
         Component2Ds.Add(component);
+        component.Initialize();
         return this;
     }
 

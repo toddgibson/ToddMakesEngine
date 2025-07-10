@@ -70,6 +70,14 @@ public class Grid : Component2d
         cell.CellTextureRect = new Rectangle(Vector2.Zero, new Vector2(texture.Width, texture.Height));
     }
 
+    internal override void Initialize()
+    {
+        CalculateCells();
+        
+        _lastGlobalPosition = GlobalPosition;
+        _lastScale = Scale;
+    }
+
     internal override void Update(float deltaTime)
     {
         if (_lastGlobalPosition != GlobalPosition || _lastScale != Scale)
