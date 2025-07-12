@@ -65,7 +65,10 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
                 DrawLayer = 999
             });
             
-        _grid = new Grid(new Vector2(8, 8), 16 * 3);
+        _grid = new Grid(new Vector2(8, 8), 16 * 3)
+        {
+            Scale = Vector2.One * 0.75f
+        };
         AddEntity(new Entity("GridEntity")) 
             .AddComponent2D(_grid);
 
