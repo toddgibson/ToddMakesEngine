@@ -134,8 +134,8 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
     private Task HandleButtonClickAsync(Button button)
     {
         var toPosition = new Vector2(
-            Random.Range(-(Game.Settings.ScreenWidth/2), Game.Settings.ScreenWidth/2), 
-            Random.Range(-(Game.Settings.ScreenHeight/2), Game.Settings.ScreenHeight/2));
+            Random.Range(-(Game.Settings.ScreenWidth / 2), Game.Settings.ScreenWidth / 2),
+            Random.Range(-(Game.Settings.ScreenHeight / 2), Game.Settings.ScreenHeight / 2));
 
         Log.Info($"Move to {toPosition}, Anchor {button.AnchorPoint}");
         
