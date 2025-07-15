@@ -2,11 +2,11 @@ namespace Engine.StateManagement;
 
 public abstract class State
 {
-    private StateMachine _stateMachine;
+    private StateMachine? _stateMachine;
 
     protected List<TransitionCondition> transitionConditions = [];
     public int TransitionConditionCount => transitionConditions.Count;
-    public Type? PreviousStateMachineState => _stateMachine.PreviousStateType;
+    public Type? PreviousStateMachineState => _stateMachine?.PreviousStateType;
 
     public void SetStateMachine(StateMachine stateMachine) => _stateMachine = stateMachine;
 
@@ -36,6 +36,8 @@ public abstract class State
 
     internal void CheckStateTransitions()
     {
+        if (_stateMachine == null) return;
+        
         if (_stateMachine.IsInEndState) return;
 
         var validTransition = transitionConditions.FirstOrDefault(transition => transition.Condition());
