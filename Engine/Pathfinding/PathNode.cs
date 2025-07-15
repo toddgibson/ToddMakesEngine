@@ -2,27 +2,19 @@ using Engine.Numerics;
 
 namespace Engine.Pathfinding;
 
-public class PathNode
+public class PathNode(int x, int y, byte movementCost, List<Vector2Int> neighbors)
 {
-    public readonly int X;
-    public readonly int Y;
-    public readonly byte MovementCost;
-    public readonly List<Vector2Int> Neighbors;
+    public readonly int X = x;
+    public readonly int Y = y;
+    public readonly byte MovementCost = movementCost;
+    public readonly List<Vector2Int> Neighbors = neighbors;
 
-    public int gCost;
-    public int hCost;
-    public int fCost;
+    public int GCost;
+    public int HCost;
+    public int FCost;
 
-    public Vector2Int? previousNodeGridPosition;
+    public Vector2Int? PreviousNodeGridPosition;
     public Vector2Int GridPosition => new(X, Y);
-
-    public PathNode(int x, int y, byte movementCost, List<Vector2Int> neighbors)
-    {
-        X = x;
-        Y = y;
-        MovementCost = movementCost;
-        Neighbors = neighbors;
-    }
 
     public override string ToString()
     {
@@ -31,6 +23,6 @@ public class PathNode
 
     public void CalculateFCost()
     {
-        fCost = gCost + hCost;
+        FCost = GCost + HCost;
     }
 }

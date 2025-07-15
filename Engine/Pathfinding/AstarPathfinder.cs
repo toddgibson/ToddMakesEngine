@@ -15,7 +15,7 @@ namespace Engine.Pathfinding
         private List<PathNode> _openList = [];
         private HashSet<PathNode> _closedList = [];
         
-        private readonly Dictionary<string, List<PathNode>> _pathCache = new(); 
+        private readonly Dictionary<string, List<PathNode>> _pathCache = new();
 
         public AstarPathfinder(int width, int height, List<PathTile> gridCells)
         {
@@ -69,14 +69,14 @@ namespace Engine.Pathfinding
                     for (var y = 0; y < _pathGridHeight; y++)
                     {
                         var pathNode = _pathNodes[x, y];
-                        pathNode.gCost = int.MaxValue;
+                        pathNode.GCost = int.MaxValue;
                         pathNode.CalculateFCost();
-                        pathNode.previousNodeGridPosition = null;
+                        pathNode.PreviousNodeGridPosition = null;
                     }
                 }
 
-                startNode.gCost = 0;
-                startNode.hCost = CalculateDistanceCost(startNode, endNode);
+                startNode.GCost = 0;
+                startNode.HCost = CalculateDistanceCost(startNode, endNode);
                 startNode.CalculateFCost();
 
                 while (_openList.Count > 0)
@@ -99,12 +99,12 @@ namespace Engine.Pathfinding
                         if (_closedList.Contains(neighborNode))
                             continue;
 
-                        var tentativeGCost = currentNode.gCost + CalculateDistanceCost(currentNode, neighborNode);
-                        if (tentativeGCost < neighborNode.gCost)
+                        var tentativeGCost = currentNode.GCost + CalculateDistanceCost(currentNode, neighborNode);
+                        if (tentativeGCost < neighborNode.GCost)
                         {
-                            neighborNode.previousNodeGridPosition = currentNode.GridPosition;
-                            neighborNode.gCost = tentativeGCost;
-                            neighborNode.hCost = CalculateDistanceCost(neighborNode, endNode);
+                            neighborNode.PreviousNodeGridPosition = currentNode.GridPosition;
+                            neighborNode.GCost = tentativeGCost;
+                            neighborNode.HCost = CalculateDistanceCost(neighborNode, endNode);
                             neighborNode.CalculateFCost();
 
                             if (!_openList.Contains(neighborNode))
@@ -129,9 +129,9 @@ namespace Engine.Pathfinding
         {
             var path = new List<PathNode> { endNode };
             var currentNode = endNode;
-            while (currentNode.previousNodeGridPosition != null)
+            while (currentNode.PreviousNodeGridPosition != null)
             {
-                var previousNode = _pathNodes[currentNode.previousNodeGridPosition.Value.X, currentNode.previousNodeGridPosition.Value.Y];
+                var previousNode = _pathNodes[currentNode.PreviousNodeGridPosition.Value.X, currentNode.PreviousNodeGridPosition.Value.Y];
                 path.Add(previousNode);
                 currentNode = previousNode;
             }
@@ -147,7 +147,7 @@ namespace Engine.Pathfinding
             var lowerMovementCostNodes = pathNodes.Where(p => p.MovementCost < byte.MaxValue).ToArray();
 
             return lowerMovementCostNodes.Any()
-                ? lowerMovementCostNodes.OrderBy(p => p.fCost).First()
+                ? lowerMovementCostNodes.OrderBy(p => p.FCost).First()
                 : null;
         }
 
