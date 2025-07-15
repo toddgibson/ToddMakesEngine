@@ -1,8 +1,11 @@
 using System.Numerics;
 using Engine;
 using Engine.Components2d;
+using Engine.Entities;
 using Engine.Extensions;
 using Engine.Logging;
+using Engine.Numerics;
+using Engine.Pathfinding;
 using Engine.Systems;
 using Engine.Ui.Components;
 using Random = Engine.Random;
@@ -21,6 +24,9 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
     private float _labelSpeed = 100f;
     
     private Grid _grid;
+    private AstarPathfinder _pathFinder;
+    private PathEntity _pathCharacter;
+    private Vector2Int _pathCharacterGridPosition;
     
     protected override void Initialize()
     {
@@ -69,28 +75,56 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         {
             Scale = Vector2.One * 0.75f
         };
-        AddEntity(new Entity("GridEntity")) 
+        AddEntity(new Entity("GridEntity")
+            {
+                Position = new Vector2(64f, 80f)
+            }) 
             .AddComponent2D(_grid);
 
+        var pathTiles = new List<PathTile>();
         foreach (var cell in _grid.Cells)
         {
             _grid.SetCellTexture(cell.Coordinate, tileTexture);
-        }
-        
-        for (var i = 0; i < 10000; i++)
-        {
-            e.AddComponent2D(new Sprite()
+            pathTiles.Add(new PathTile()
             {
-                Texture = spriteTexture,
-                Mode = SpriteMode.Framed,
-                FrameSize = Vector2.One * 16,
-                CurrentFrame = Random.Range(0, 4),
-                LocalPosition = Random.Vector2(-250, 250),
-                PivotPoint = new Vector2(0.5f * 16, 0.5f * 16),
-                Size = new Vector2(16, 16),
-                Scale = Vector2.One * 3
+                GridPosition = cell.Coordinate.ToVector2Int(),
+                NeighborPositions = cell.Neighbors.Select(p => p.Coordinate.ToVector2Int()).ToList(),
             });
         }
+        _pathFinder = new AstarPathfinder((int)_grid.Size.X, (int)_grid.Size.Y, pathTiles);
+
+        _pathCharacter = AddEntity(new PathEntity("PathCharacter")
+        {
+            Position = _grid.GetCellAtCoordinate(0, 0)?.WorldCenter ?? Vector2.Zero,
+            CurrentPathNodeIndex = 0
+        });
+        _pathCharacter.AddComponent2D(new Sprite()
+        {
+            Texture = spriteTexture,
+            Mode = SpriteMode.Framed,
+            FrameSize = Vector2.One * 16,
+            CurrentFrame = 5,
+            LocalPosition = new Vector2(-4, -12) * 3,
+            PivotPoint = new Vector2(0.5f * 16, 0.5f * 16),
+            Size = new Vector2(16, 16),
+            Scale = Vector2.One * 3
+        });
+        _pathCharacterGridPosition = Vector2Int.Zero;
+        
+        // for (var i = 0; i < 10000; i++)
+        // {
+        //     e.AddComponent2D(new Sprite()
+        //     {
+        //         Texture = spriteTexture,
+        //         Mode = SpriteMode.Framed,
+        //         FrameSize = Vector2.One * 16,
+        //         CurrentFrame = Random.Range(0, 4),
+        //         LocalPosition = Random.Vector2(-250, 250),
+        //         PivotPoint = new Vector2(0.5f * 16, 0.5f * 16),
+        //         Size = new Vector2(16, 16),
+        //         Scale = Vector2.One * 3
+        //     });
+        // }
     }
 
     protected override void Activated()
@@ -128,6 +162,23 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         {
             spriteEntity.GetComponentOfType<Sprite>()!.CurrentFrame += 1;
             spriteEntity.GetComponentsOfType<Sprite>()[1].TweenColorTint(ColorHelpers.GetRandomColor(), 1.0f);
+        }
+
+        if (!_pathCharacter.HasPath)
+        {
+            var randomTile = _grid.Cells.PickRandom();
+            var path = _pathFinder.FindPath(_pathCharacterGridPosition, randomTile.Coordinate.ToVector2Int());
+            _pathCharacter.SetPath(path);
+        }
+        else
+        {
+            var nextPathNodeWorldPosition = _grid.GetCellAtCoordinate(_pathCharacter.GetNextPathNode()!.ToVector2())!.WorldCenter;
+            new Tween(_pathCharacter, nameof(_pathCharacter.Position), _pathCharacter.Position,
+                nextPathNodeWorldPosition, 1f).OnFinished(() =>
+            {
+                Log.Info($"Path: {_pathCharacter.CurrentPathNodeIndex}/{_pathCharacter.Path.Count - 1}");
+                _pathCharacterGridPosition = _pathCharacter.CurrentPathNode.GridPosition;
+            });
         }
     }
 

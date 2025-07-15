@@ -1,4 +1,5 @@
 using System.Numerics;
+using Engine.Entities;
 using Raylib_cs;
 
 namespace Engine.Components2d;

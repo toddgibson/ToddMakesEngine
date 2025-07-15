@@ -32,4 +32,7 @@ public struct Vector2Int
     {
         return HashCode.Combine(X, Y);
     }
+    
+    public static Vector2Int Zero => new Vector2Int(0, 0);
+    public static Vector2Int One => new Vector2Int(1, 1);
 }

@@ -161,5 +161,10 @@ namespace Engine.Pathfinding
             var remaining = Math.Abs(xDistance - yDistance);
             return actualDiagonalCost * Math.Min(xDistance, yDistance) + actualStraightCost * remaining;
         }
+
+        public PathNode GetNodeAtCoordinate(int x, int y)
+        {
+            return _pathNodes[x, y];
+        }
     }
 }

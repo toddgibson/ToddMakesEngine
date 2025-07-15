@@ -1,5 +1,3 @@
-
-
 using Raylib_cs;
 
 namespace Engine.Extensions;

@@ -36,14 +36,15 @@ public class Grid : Component2d
                 var cell = GetCellAtCoordinate(new Vector2(x, y));
                 if (cell == null)
                 {
-                    Cells.Add(new GridCell()
+                    var newCell = new GridCell()
                     {
                         Coordinate = new Vector2(x, y),
                         ScaledSize = scaledCellSize,
                         ScaledHalfSize = scaledCellHalfSize,
                         WorldPosition = cellPosition,
                         WorldCenter = cellCenter
-                    });
+                    };
+                    Cells.Add(newCell);
                 }
                 else
                 {
@@ -54,6 +55,57 @@ public class Grid : Component2d
                 }
             }
         }
+
+        for (var x = 0; x < Size.X; x++)
+        {
+            for (var y = 0; y < Size.Y; y++)
+            {
+                var cell = GetCellAtCoordinate(new Vector2(x, y));
+                if (cell != null) 
+                    CalculateNeighbors(cell);
+            }
+        }
+    }
+
+    public List<GridCell> CalculateNeighbors(GridCell cell)
+    {
+        var neighbors = new List<GridCell>();
+        
+        var leftNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2(-1, 0));
+        var rightNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2(1, 0));
+        var topNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2(0, -1));
+        var bottomNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2(0, 1));
+        
+        var topLeftNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2(-1, -1));
+        var topRightNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2(1, -1));
+        var bottomLeftNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2(-1, 1));
+        var bottomRightNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2(1, 1));
+        
+        if (leftNeighbor != null)
+            neighbors.Add(leftNeighbor);
+        if (rightNeighbor != null)
+            neighbors.Add(rightNeighbor);
+        if (topNeighbor != null)
+            neighbors.Add(topNeighbor);
+        if (bottomNeighbor != null)
+            neighbors.Add(bottomNeighbor);
+        if (topLeftNeighbor != null)
+            neighbors.Add(topLeftNeighbor);
+        if (topRightNeighbor != null)
+            neighbors.Add(topRightNeighbor);
+        if (bottomLeftNeighbor != null)
+            neighbors.Add(bottomLeftNeighbor);
+        if (bottomRightNeighbor != null)
+            neighbors.Add(bottomRightNeighbor);
+        
+        cell.Neighbors = neighbors;
+
+        return neighbors;
+    }
+    
+    public GridCell? GetCellAtCoordinate(int x, int y)
+    {
+        return GetCellAtCoordinate(new Vector2(x, y));
     }
 
     public GridCell? GetCellAtCoordinate(Vector2 coordinate)
@@ -120,5 +172,7 @@ public class Grid : Component2d
         public Vector2 ScaledHalfSize { get; set; }
         public Texture2D? CellTexture { get; set; }
         public Rectangle? CellTextureRect { get; set; }
+        
+        public List<GridCell> Neighbors { get; set; } = [];
     }
 }

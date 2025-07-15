@@ -2,7 +2,7 @@ using System.Numerics;
 using Engine.Components2d;
 using ZLinq;
 
-namespace Engine;
+namespace Engine.Entities;
 
 public class Entity(string name)
 {
