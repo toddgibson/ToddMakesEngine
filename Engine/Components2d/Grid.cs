@@ -174,5 +174,7 @@ public class Grid : Component2d
         public Rectangle? CellTextureRect { get; set; }
         
         public List<GridCell> Neighbors { get; set; } = [];
+        public bool IsPassable { get; set; } = true;
+        public byte PathWeight { get; set; } = 1;
     }
 }

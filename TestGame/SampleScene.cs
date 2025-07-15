@@ -81,17 +81,11 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
             }) 
             .AddComponent2D(_grid);
 
-        var pathTiles = new List<PathTile>();
         foreach (var cell in _grid.Cells)
         {
             _grid.SetCellTexture(cell.Coordinate, tileTexture);
-            pathTiles.Add(new PathTile()
-            {
-                GridPosition = cell.Coordinate.ToVector2Int(),
-                NeighborPositions = cell.Neighbors.Select(p => p.Coordinate.ToVector2Int()).ToList(),
-            });
         }
-        _pathFinder = new AstarPathfinder((int)_grid.Size.X, (int)_grid.Size.Y, pathTiles);
+        _pathFinder = new AstarPathfinder((int)_grid.Size.X, (int)_grid.Size.Y, _grid.Cells);
 
         _pathCharacter = AddEntity(new PathEntity("PathCharacter")
         {
@@ -166,7 +160,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
 
         if (!_pathCharacter.HasPath)
         {
-            var randomTile = _grid.Cells.PickRandom();
+            var randomTile = _grid.Cells.Where(p => p.IsPassable).ToList().PickRandom();
             var path = _pathFinder.FindPath(_pathCharacterGridPosition, randomTile.Coordinate.ToVector2Int());
             _pathCharacter.SetPath(path);
         }

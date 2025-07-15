@@ -1,4 +1,7 @@
-﻿using Engine.Logging;
+﻿using System.Numerics;
+using Engine.Components2d;
+using Engine.Extensions;
+using Engine.Logging;
 using Engine.Numerics;
 
 namespace Engine.Pathfinding
@@ -8,16 +11,38 @@ namespace Engine.Pathfinding
         private const int MOVE_STRAIGHT_COST = 10;
         private const int MOVE_DIAGONAL_COST = 14;
 
-        private readonly int _pathGridWidth;
-        private readonly int _pathGridHeight;
+        private int _pathGridWidth;
+        private int _pathGridHeight;
 
-        private readonly PathNode[,] _pathNodes;
+        private PathNode[,] _pathNodes;
         private List<PathNode> _openList = [];
         private HashSet<PathNode> _closedList = [];
         
         private readonly Dictionary<string, List<PathNode>> _pathCache = new();
 
+        public AstarPathfinder(int width, int height, List<Grid.GridCell> gridCells)
+        {
+            var pathTiles = new List<PathTile>();
+            for (var i = 0; i < gridCells.Count; i++)
+            {
+                var cell  = gridCells[i];
+                pathTiles.Add(new PathTile()
+                {
+                    GridPosition = cell.Coordinate.ToVector2Int(),
+                    NeighborPositions = cell.Neighbors.Select(p => p.Coordinate.ToVector2Int()).ToList(),
+                    IsPassable = cell.IsPassable,
+                    Weight = cell.PathWeight
+                });
+            }
+            Initialize(width, height, pathTiles);
+        }
+        
         public AstarPathfinder(int width, int height, List<PathTile> gridCells)
+        {
+            Initialize(width, height, gridCells);
+        }
+
+        private void Initialize(int width, int height, List<PathTile> gridCells)
         {
             height++;
             
