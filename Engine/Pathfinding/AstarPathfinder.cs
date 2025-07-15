@@ -8,12 +8,12 @@ namespace Engine.Pathfinding
         private const int MOVE_STRAIGHT_COST = 10;
         private const int MOVE_DIAGONAL_COST = 14;
 
-        private readonly int PathGridWidth;
-        private readonly int PathGridHeight;
+        private readonly int _pathGridWidth;
+        private readonly int _pathGridHeight;
 
-        private readonly PathNode[,] PathNodes;
-        private List<PathNode> OpenList;
-        private HashSet<PathNode> ClosedList;
+        private readonly PathNode[,] _pathNodes;
+        private List<PathNode> _openList = [];
+        private HashSet<PathNode> _closedList = [];
         
         private readonly Dictionary<string, List<PathNode>> _pathCache = new(); 
 
@@ -21,9 +21,9 @@ namespace Engine.Pathfinding
         {
             height++;
             
-            PathGridWidth = width;
-            PathGridHeight = height;
-            PathNodes = new PathNode[width, height];
+            _pathGridWidth = width;
+            _pathGridHeight = height;
+            _pathNodes = new PathNode[width, height];
 
             for (var x = 0; x < width; x++)
             {
@@ -35,40 +35,40 @@ namespace Engine.Pathfinding
                     if (gridCell != null)
                     {
                         var gridCellNeighbors = gridCell.NeighborPositions;
-                        PathNodes[x, y] = new PathNode(x, y, gridCell.Weight, gridCellNeighbors);
+                        _pathNodes[x, y] = new PathNode(x, y, gridCell.Weight, gridCellNeighbors);
                     }
                     else
                     {
-                        PathNodes[x, y] = new PathNode(x, y, Byte.MaxValue, new List<Vector2Int>());
+                        _pathNodes[x, y] = new PathNode(x, y, Byte.MaxValue, new List<Vector2Int>());
                     }
                 }
             }
         }
 
-        public List<PathNode> FindPath(Vector2Int gridPositionStart, Vector2Int gridPositionEnd)
+        public List<PathNode>? FindPath(Vector2Int gridPositionStart, Vector2Int gridPositionEnd)
         {
             return FindPath(gridPositionStart.X, gridPositionStart.Y, gridPositionEnd.X, gridPositionEnd.Y);
         }
 
-        public List<PathNode> FindPath(int startX, int startY, int endX, int endY)
+        public List<PathNode>? FindPath(int startX, int startY, int endX, int endY)
         {
             try
             {
                 var pathName = $"{startX},{startY}-{endX},{endY}";
-                if (_pathCache.ContainsKey(pathName))
-                    return _pathCache[pathName];
+                if (_pathCache.TryGetValue(pathName, out var cachedPath))
+                    return cachedPath;
                 
-                var startNode = PathNodes[startX, startY];
-                var endNode = PathNodes[endX, endY];
+                var startNode = _pathNodes[startX, startY];
+                var endNode = _pathNodes[endX, endY];
 
-                OpenList = new List<PathNode> { startNode };
-                ClosedList = new HashSet<PathNode>();
+                _openList = [startNode];
+                _closedList = [];
 
-                for (var x = 0; x < PathGridWidth; x++)
+                for (var x = 0; x < _pathGridWidth; x++)
                 {
-                    for (var y = 0; y < PathGridHeight; y++)
+                    for (var y = 0; y < _pathGridHeight; y++)
                     {
-                        var pathNode = PathNodes[x, y];
+                        var pathNode = _pathNodes[x, y];
                         pathNode.gCost = int.MaxValue;
                         pathNode.CalculateFCost();
                         pathNode.previousNodeGridPosition = null;
@@ -79,9 +79,9 @@ namespace Engine.Pathfinding
                 startNode.hCost = CalculateDistanceCost(startNode, endNode);
                 startNode.CalculateFCost();
 
-                while (OpenList.Count > 0)
+                while (_openList.Count > 0)
                 {
-                    var currentNode = GetLowestFCostNode(OpenList);
+                    var currentNode = GetLowestFCostNode(_openList);
                     if (currentNode == null) break;
 
                     if (currentNode == endNode)
@@ -90,13 +90,13 @@ namespace Engine.Pathfinding
                         return CalculatePath(endNode);
                     }
 
-                    OpenList.Remove(currentNode);
-                    ClosedList.Add(currentNode);
+                    _openList.Remove(currentNode);
+                    _closedList.Add(currentNode);
 
                     foreach (var neighborNodePosition in currentNode.Neighbors)
                     {
-                        var neighborNode = PathNodes[(int)neighborNodePosition.X, (int)neighborNodePosition.Y];
-                        if (ClosedList.Contains(neighborNode))
+                        var neighborNode = _pathNodes[neighborNodePosition.X, neighborNodePosition.Y];
+                        if (_closedList.Contains(neighborNode))
                             continue;
 
                         var tentativeGCost = currentNode.gCost + CalculateDistanceCost(currentNode, neighborNode);
@@ -107,8 +107,8 @@ namespace Engine.Pathfinding
                             neighborNode.hCost = CalculateDistanceCost(neighborNode, endNode);
                             neighborNode.CalculateFCost();
 
-                            if (!OpenList.Contains(neighborNode))
-                                OpenList.Add(neighborNode);
+                            if (!_openList.Contains(neighborNode))
+                                _openList.Add(neighborNode);
                         }
                     }
                 }
@@ -116,8 +116,8 @@ namespace Engine.Pathfinding
             catch
             {
                 Log.Error($"Pathfinder Error: {startX},{startY} - {endX},{endY}");
-                Log.Info(PathNodes[startX, startY].ToString());
-                Log.Info(PathNodes[endX, endY].ToString());
+                Log.Info(_pathNodes[startX, startY].ToString());
+                Log.Info(_pathNodes[endX, endY].ToString());
                 throw;
             }
 
@@ -131,7 +131,7 @@ namespace Engine.Pathfinding
             var currentNode = endNode;
             while (currentNode.previousNodeGridPosition != null)
             {
-                var previousNode = PathNodes[(int)currentNode.previousNodeGridPosition.Value.X, (int)currentNode.previousNodeGridPosition.Value.Y];
+                var previousNode = _pathNodes[currentNode.previousNodeGridPosition.Value.X, currentNode.previousNodeGridPosition.Value.Y];
                 path.Add(previousNode);
                 currentNode = previousNode;
             }
