@@ -1,13 +1,7 @@
 namespace Engine.StateManagement;
 
-public class TransitionCondition
+public class TransitionCondition(Type toStateType, Func<bool> condition)
 {
-    public TransitionCondition(Type toStateType, Func<bool> condition)
-    {
-        ToStateType = toStateType;
-        Condition = condition;
-    }
-
-    public readonly Type ToStateType;
-    public readonly Func<bool> Condition;
+    public readonly Type ToStateType = toStateType;
+    public readonly Func<bool> Condition = condition;
 }

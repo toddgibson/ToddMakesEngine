@@ -2,17 +2,17 @@ namespace Engine.StateManagement
 {
     public class StateMachine
     {
-        private List<State> _states = new();
-        private List<TransitionCondition> _anyStateTransitionConditions = new();
+        private List<State> _states = [];
+        private List<TransitionCondition> _anyStateTransitionConditions = [];
 
-        private State _currentState;
+        private State? _currentState;
 
-        public Type PreviousStateType { get; private set; }
+        public Type? PreviousStateType { get; private set; }
 
         public delegate void StateChangedEventHandler(object sender, StateChangedEventArgs e);
-        public event StateChangedEventHandler OnStateChanged;
+        public event StateChangedEventHandler? OnStateChanged;
 
-        public bool IsInEndState => _currentState.IsEndState;
+        public bool IsInEndState => _currentState?.IsEndState ?? false;
 
         public void Initialize(List<State> states, List<TransitionCondition> anyStateTransitionConditions)
         {
@@ -37,15 +37,17 @@ namespace Engine.StateManagement
         {
             var previousState = _currentState;
 
-            PreviousStateType = previousState.GetType();
-            previousState.ClearTimedTickAction();
-            previousState.OnExit();
+            if (previousState != null)
+            {
+                PreviousStateType = previousState.GetType();
+                previousState.ClearTimedTickAction();
+                previousState.OnExit();
+            }
 
             _currentState = newState;
             _currentState.OnEnter();
 
-            if (OnStateChanged != null)
-                OnStateChanged(this, new StateChangedEventArgs(_currentState.GetType(), previousState.GetType()));
+            OnStateChanged?.Invoke(this, new StateChangedEventArgs(_currentState.GetType(), previousState!.GetType()));
         }
 
         public void Tick(float deltaTime = 0.0f)

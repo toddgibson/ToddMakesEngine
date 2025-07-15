@@ -1,13 +1,7 @@
 namespace Engine.StateManagement;
 
-public class StateChangedEventArgs
+public class StateChangedEventArgs(Type currentState, Type previousState)
 {
-    public readonly Type currentState;
-    public readonly Type previousState;
-
-    public StateChangedEventArgs(Type currentState, Type previousState)
-    {
-        this.currentState = currentState;
-        this.previousState = previousState;
-    }
+    public readonly Type CurrentState = currentState;
+    public readonly Type PreviousState = previousState;
 }

@@ -4,9 +4,9 @@ public abstract class State
 {
     private StateMachine _stateMachine;
 
-    protected List<TransitionCondition> transitionConditions = new();
+    protected List<TransitionCondition> transitionConditions = [];
     public int TransitionConditionCount => transitionConditions.Count;
-    public Type PreviousStateMachineState => _stateMachine.PreviousStateType;
+    public Type? PreviousStateMachineState => _stateMachine.PreviousStateType;
 
     public void SetStateMachine(StateMachine stateMachine) => _stateMachine = stateMachine;
 
@@ -14,7 +14,7 @@ public abstract class State
 
     private bool _timedTickEnabled = false;
     private float _tickTimerSeconds = float.MinValue;
-    private Action TimedTickAction { get; set; }
+    private Action? TimedTickAction { get; set; }
 
     /// <summary>
     /// When implementing this method, configure the Transition Conditions
