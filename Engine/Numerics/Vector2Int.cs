@@ -11,6 +11,26 @@ public struct Vector2Int
         Y = y;
     }
     
+    public static Vector2Int operator +(Vector2Int a, Vector2Int b)
+    {
+        return new Vector2Int(a.X + b.X, a.Y + b.Y);
+    }
+    
+    public static Vector2Int operator -(Vector2Int a, Vector2Int b)
+    {
+        return new Vector2Int(a.X - b.X, a.Y - b.Y);
+    }
+    
+    public static Vector2Int operator *(Vector2Int a, Vector2Int b)
+    {
+        return new Vector2Int(a.X * b.X, a.Y * b.Y);
+    }
+    
+    public static Vector2Int operator /(Vector2Int a, Vector2Int b)
+    {
+        return new Vector2Int(a.X / b.X, a.Y / b.Y);
+    }
+    
     public static bool operator ==(Vector2Int a, Vector2Int b)
     {
         return a.X == b.X && a.Y == b.Y;

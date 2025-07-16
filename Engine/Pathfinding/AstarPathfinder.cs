@@ -37,6 +37,23 @@ namespace Engine.Pathfinding
             Initialize(width, height, pathTiles);
         }
         
+        public AstarPathfinder(int width, int height, List<HexGridCell> gridCells)
+        {
+            var pathTiles = new List<PathTile>();
+            for (var i = 0; i < gridCells.Count; i++)
+            {
+                var cell  = gridCells[i];
+                pathTiles.Add(new PathTile()
+                {
+                    GridPosition = cell.Coordinate,
+                    NeighborPositions = cell.Neighbors.Select(p => p.Coordinate).ToList(),
+                    IsPassable = cell.IsPassable,
+                    Weight = cell.PathWeight
+                });
+            }
+            Initialize(width, height, pathTiles);
+        }
+        
         public AstarPathfinder(int width, int height, List<PathTile> gridCells)
         {
             Initialize(width, height, gridCells);

@@ -28,6 +28,11 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
     private PathEntity _pathCharacter;
     private Vector2Int _pathCharacterGridPosition;
     
+    private HexGrid _hexGrid;
+    private AstarPathfinder _hexPathFinder;
+    private PathEntity _hexPathCharacter;
+    private Vector2Int _hexPathCharacterGridPosition;
+    
     protected override void Initialize()
     {
         AddUiComponent(new Button("btnSpin", Name == "SampleScene" ? "Spin Me!" : "Whoa Dude!", HandleButtonClickAsync));
@@ -104,7 +109,34 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
             Scale = Vector2.One * 3
         });
         _pathCharacterGridPosition = Vector2Int.Zero;
+
+        _hexGrid = new HexGrid(new Vector2(8, 8), HexGrid.Style.FlatTop, 24);
+        AddEntity(new Entity("HexGridEntity")
+            {
+                Position = new Vector2(464f, 80f)
+            })
+            .AddComponent2D(_hexGrid);
         
+        _hexPathFinder = new AstarPathfinder((int)_hexGrid.Size.X, (int)_hexGrid.Size.Y, _hexGrid.Cells);
+
+        _hexPathCharacter = AddEntity(new PathEntity("HexPathCharacter")
+        {
+            Position = _hexGrid.GetCellAtCoordinate(0, 0)?.WorldPosition ?? Vector2.Zero,
+            CurrentPathNodeIndex = 0
+        });
+        _hexPathCharacter.AddComponent2D(new Sprite()
+        {
+            Texture = spriteTexture,
+            Mode = SpriteMode.Framed,
+            FrameSize = Vector2.One * 16,
+            CurrentFrame = 6,
+            LocalPosition = new Vector2(-4, -12) * 3,
+            PivotPoint = new Vector2(0.5f * 16, 0.5f * 16),
+            Size = new Vector2(16, 16),
+            Scale = Vector2.One * 3
+        });
+        _hexPathCharacterGridPosition = Vector2Int.Zero;
+
         // for (var i = 0; i < 10000; i++)
         // {
         //     e.AddComponent2D(new Sprite()
@@ -158,6 +190,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
             spriteEntity.GetComponentsOfType<Sprite>()[1].TweenColorTint(ColorHelpers.GetRandomColor(), 1.0f);
         }
 
+        // move the grid character around
         if (!_pathCharacter.HasPath)
         {
             var randomTile = _grid.Cells.Where(p => p.IsPassable).ToList().PickRandom();
@@ -172,6 +205,24 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
             {
                 Log.Info($"Path: {_pathCharacter.CurrentPathNodeIndex}/{_pathCharacter.Path.Count - 1}");
                 _pathCharacterGridPosition = _pathCharacter.CurrentPathNode.GridPosition;
+            });
+        }
+        
+        // move the hex grid character around
+        if (!_hexPathCharacter.HasPath)
+        {
+            var randomTile = _hexGrid.Cells.Where(p => p.IsPassable).ToList().PickRandom();
+            var path = _hexPathFinder.FindPath(_hexPathCharacterGridPosition, randomTile.Coordinate);
+            _hexPathCharacter.SetPath(path);
+        }
+        else
+        {
+            var nextPathNodeWorldPosition = _hexGrid.GetCellAtCoordinate(_hexPathCharacter.GetNextPathNode()!.ToVector2Int())!.WorldPosition;
+            new Tween(_hexPathCharacter, nameof(_hexPathCharacter.Position), _hexPathCharacter.Position,
+                nextPathNodeWorldPosition, 1f).OnFinished(() =>
+            {
+                Log.Info($"Hex Path: {_hexPathCharacter.CurrentPathNodeIndex}/{_hexPathCharacter.Path.Count - 1}");
+                _hexPathCharacterGridPosition = _hexPathCharacter.CurrentPathNode.GridPosition;
             });
         }
     }
