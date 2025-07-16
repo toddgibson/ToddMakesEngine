@@ -59,6 +59,9 @@ public class HexGrid : Component2d
                 {
                     cell.CornerPoints.Add(CalculateCornerWorldPosition(worldPosition, i));
                 }
+                var cornersToDraw = cell.CornerPoints;
+                cornersToDraw.Add(cornersToDraw[0]);
+                cell.CornerPointsToDraw = cornersToDraw.ToArray();
                 Cells.Add(cell);
             }
         }
@@ -126,12 +129,18 @@ public class HexGrid : Component2d
 
         if (GridStyle == Style.PointyTop)
         {
-            var topLeftNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2Int(0, -1));
-            var topRightNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2Int(1, -1));
+            var isEvenRow = cell.Coordinate.Y % 2 == 0;
+            
+            var topLeftNeighbor = GetCellAtCoordinate(cell.Coordinate + 
+                                                      (isEvenRow ? new Vector2Int(-1, -1) : new Vector2Int(0, -1)));
+            var topRightNeighbor = GetCellAtCoordinate(cell.Coordinate + 
+                                                       (isEvenRow ? new Vector2Int(0, 1) : new Vector2Int(1, -1)));
+            var bottomLeftNeighbor = GetCellAtCoordinate(cell.Coordinate + 
+                                                         (isEvenRow ? new Vector2Int(-1, 1) : new Vector2Int(0, 1)));
+            var bottomRightNeighbor = GetCellAtCoordinate(cell.Coordinate + 
+                                                          (isEvenRow ? new Vector2Int(0, 1) : new Vector2Int(1, 1)));
             var leftNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2Int(-1, 0));
             var rightNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2Int(1, 0));
-            var bottomLeftNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2Int(0, 1));
-            var bottomRightNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2Int(1, 1));
             
             if (topLeftNeighbor != null)
                 neighbors.Add(topLeftNeighbor);
@@ -148,12 +157,18 @@ public class HexGrid : Component2d
         }
         else
         {
-            var topLeftNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2Int(-1, 0));
-            var topRightNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2Int(1, 0));
+            var isEvenRow = cell.Coordinate.X % 2 == 0;
+            
+            var topLeftNeighbor = GetCellAtCoordinate(cell.Coordinate + 
+                                                      (isEvenRow ? new Vector2Int(-1, -1) : new Vector2Int(-1, 0)));
+            var topRightNeighbor = GetCellAtCoordinate(cell.Coordinate + 
+                                                       (isEvenRow ? new Vector2Int(1, -1) : new Vector2Int(1, 0)));
+            var bottomLeftNeighbor = GetCellAtCoordinate(cell.Coordinate + 
+                                                         (isEvenRow ? new Vector2Int(-1, 0) : new Vector2Int(-1, 1)));
+            var bottomRightNeighbor = GetCellAtCoordinate(cell.Coordinate + 
+                                                          (isEvenRow ? new Vector2Int(1, 0) : new Vector2Int(1, 1)));
             var topNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2Int(0, -1));
             var bottomNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2Int(0, 1));
-            var bottomLeftNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2Int(-1, 1));
-            var bottomRightNeighbor = GetCellAtCoordinate(cell.Coordinate + new Vector2Int(1, 1));
             
             if (topLeftNeighbor != null)
                 neighbors.Add(topLeftNeighbor);
@@ -200,9 +215,7 @@ public class HexGrid : Component2d
             var cell = Cells[i];
             if (DrawGridLines)
             {
-                var cornerPoints = cell.CornerPoints;
-                cornerPoints.Add(cell.CornerPoints[0]);
-                Raylib.DrawLineStrip(cornerPoints.ToArray(), cell.CornerPoints.Count, BorderColor);
+                Raylib.DrawLineStrip(cell.CornerPointsToDraw, cell.CornerPoints.Count, BorderColor);
                 Raylib.DrawText($"{cell.Coordinate.X},{cell.Coordinate.Y}", (int)cell.WorldPosition.X - 5, (int)cell.WorldPosition.Y - 5, 10, BorderColor);
             }
         }
@@ -212,9 +225,10 @@ public class HexGrid : Component2d
 public class HexGridCell
 {
     public Vector2Int Coordinate { get; set; }
-    public bool IsEvenRow => Coordinate.Y % 2 == 0;
     public Vector2 WorldPosition { get; set; }
     public List<Vector2> CornerPoints { get; set; } = [];
+
+    internal Vector2[] CornerPointsToDraw { get; set; } = [];
     
     public Texture2D? CellTexture { get; set; }
     public Rectangle? CellTextureRect { get; set; }
