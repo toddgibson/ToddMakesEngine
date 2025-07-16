@@ -150,8 +150,7 @@ public class Grid : Component2d
 
                 if (cell is { CellTexture: not null, CellTextureRect: not null })
                 {
-                    var drawRect = new Rectangle(cell.WorldPosition, cell.ScaledSize);
-                    Raylib.DrawTexturePro(cell.CellTexture.Value, cell.CellTextureRect.Value, drawRect, Vector2.Zero, 0f, Color.White);
+                    Raylib.DrawTexturePro(cell.CellTexture.Value, cell.CellTextureRect.Value, cell.DrawRect, Vector2.Zero, 0f, Color.White);
                 }
                 
                 if (!DrawGridLines) continue;
@@ -176,5 +175,15 @@ public class Grid : Component2d
         public List<GridCell> Neighbors { get; set; } = [];
         public bool IsPassable { get; set; } = true;
         public byte PathWeight { get; set; } = 1;
+        
+        private Rectangle? _drawRect;
+        internal Rectangle DrawRect
+        {
+            get
+            {
+                _drawRect ??= new Rectangle(WorldPosition, ScaledSize);
+                return _drawRect.Value;
+            }
+        }
     }
 }
