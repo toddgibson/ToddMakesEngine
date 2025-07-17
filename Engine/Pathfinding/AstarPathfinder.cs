@@ -3,6 +3,7 @@ using Engine.Components2d;
 using Engine.Extensions;
 using Engine.Logging;
 using Engine.Numerics;
+using ZLinq;
 
 namespace Engine.Pathfinding
 {
@@ -29,7 +30,7 @@ namespace Engine.Pathfinding
                 pathTiles.Add(new PathTile()
                 {
                     GridPosition = cell.Coordinate.ToVector2Int(),
-                    NeighborPositions = cell.Neighbors.Select(p => p.Coordinate.ToVector2Int()).ToList(),
+                    NeighborPositions = cell.Neighbors.Select(p => new PathingNeighbor { GridPosition = p.Coordinate.ToVector2Int() }).ToList(),
                     IsPassable = cell.IsPassable,
                     Weight = cell.PathWeight
                 });
@@ -46,7 +47,7 @@ namespace Engine.Pathfinding
                 pathTiles.Add(new PathTile()
                 {
                     GridPosition = cell.Coordinate,
-                    NeighborPositions = cell.Neighbors.Select(p => p.Coordinate).ToList(),
+                    NeighborPositions = cell.Neighbors.Select(p => new PathingNeighbor { GridPosition = p.Coordinate }).ToList(),
                     IsPassable = cell.IsPassable,
                     Weight = cell.PathWeight
                 });
@@ -81,7 +82,7 @@ namespace Engine.Pathfinding
                     }
                     else
                     {
-                        _pathNodes[x, y] = new PathNode(x, y, Byte.MaxValue, new List<Vector2Int>());
+                        _pathNodes[x, y] = new PathNode(x, y, byte.MaxValue, []);
                     }
                 }
             }
@@ -135,9 +136,9 @@ namespace Engine.Pathfinding
                     _openList.Remove(currentNode);
                     _closedList.Add(currentNode);
 
-                    foreach (var neighborNodePosition in currentNode.Neighbors)
+                    foreach (var neighborNodePosition in currentNode.Neighbors.AsValueEnumerable().Where(p => p.IsTraversable))
                     {
-                        var neighborNode = _pathNodes[neighborNodePosition.X, neighborNodePosition.Y];
+                        var neighborNode = _pathNodes[neighborNodePosition.GridPosition.X, neighborNodePosition.GridPosition.Y];
                         if (_closedList.Contains(neighborNode))
                             continue;
 
@@ -204,9 +205,15 @@ namespace Engine.Pathfinding
             return actualDiagonalCost * Math.Min(xDistance, yDistance) + actualStraightCost * remaining;
         }
 
-        public PathNode GetNodeAtCoordinate(int x, int y)
+        public PathNode GetNodeAtCoordinate(Vector2Int gridPosition)
         {
-            return _pathNodes[x, y];
+            return _pathNodes[gridPosition.X, gridPosition.Y];
+        }
+
+        public void UpdatePathNodeNeighbors(Vector2Int gridPosition, List<PathingNeighbor> pathingNeighbors)
+        {
+            var node = GetNodeAtCoordinate(gridPosition);
+            node.Neighbors = pathingNeighbors;
         }
     }
 }

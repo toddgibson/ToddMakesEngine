@@ -33,6 +33,9 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
     private PathEntity _hexPathCharacter;
     private Vector2Int _hexPathCharacterGridPosition;
     
+    private PathEntity _hexPathCharacter2;
+    private Vector2Int _hexPathCharacterGridPosition2;
+    
     protected override void Initialize()
     {
         AddUiComponent(new Button("btnSpin", Name == "SampleScene" ? "Spin Me!" : "Whoa Dude!", HandleButtonClickAsync));
@@ -42,6 +45,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         var scream = AssetManager.GetSound("scream");
         var tileTexture = AssetManager.GetTexture("test-tile");
         var tileTextureHex = AssetManager.GetTexture("test-tile-hex");
+        var tileTextureHexWall = AssetManager.GetTexture("test-tile-hex-wall");
         _soundEffect = new SoundEffect(scream);
         _song = new Song(AssetManager.GetSong("peace"));
         
@@ -119,7 +123,10 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
             .AddComponent2D(_hexGrid);
         foreach (var cell in _hexGrid.Cells)
         {
-            _hexGrid.SetCellTexture(cell.Coordinate, tileTextureHex);
+            if (cell.Coordinate == new Vector2Int(5, 5))
+                _hexGrid.SetCellTexture(cell.Coordinate, tileTextureHexWall);
+            else
+                _hexGrid.SetCellTexture(cell.Coordinate, tileTextureHex);
         }
         
         _hexPathFinder = new AstarPathfinder((int)_hexGrid.Size.X, (int)_hexGrid.Size.Y, _hexGrid.Cells);
@@ -141,6 +148,43 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
             Scale = Vector2.One * 3
         });
         _hexPathCharacterGridPosition = Vector2Int.Zero;
+
+        var pos2 = _hexGrid.GetCellAtCoordinate(5, 4)?.WorldPosition ?? Vector2.Zero;
+        _hexPathCharacter2 = AddEntity(new PathEntity("HexPathCharacter2")
+        {
+            Position = pos2,
+            CurrentPathNodeIndex = 0
+        });
+        _hexPathCharacter2.AddComponent2D(new Sprite()
+        {
+            Texture = spriteTexture,
+            Mode = SpriteMode.Framed,
+            FrameSize = Vector2.One * 16,
+            CurrentFrame = 4,
+            LocalPosition = new Vector2(-4.5f, -11f) * 3,
+            PivotPoint = new Vector2(0.5f * 16, 0.5f * 16),
+            Size = new Vector2(16, 16),
+            Scale = Vector2.One * 3
+        });
+        _hexPathCharacterGridPosition2 = new Vector2Int(5, 4);
+        
+        var hexCell = _hexPathFinder.GetNodeAtCoordinate(new Vector2Int(5, 5));
+        var neighborIndex = hexCell.Neighbors.FindIndex(p => p.GridPosition == new Vector2Int(5, 4));
+        hexCell.Neighbors[neighborIndex] = new PathingNeighbor()
+        {
+            GridPosition = hexCell.Neighbors[neighborIndex].GridPosition,
+            IsTraversable = false
+        };
+        _hexPathFinder.UpdatePathNodeNeighbors(hexCell.GridPosition, hexCell.Neighbors);
+        
+        var hexCell2 = _hexPathFinder.GetNodeAtCoordinate(new Vector2Int(5, 4));
+        var neighborIndex2 = hexCell2.Neighbors.FindIndex(p => p.GridPosition == new Vector2Int(5, 5));
+        hexCell2.Neighbors[neighborIndex2] = new PathingNeighbor()
+        {
+            GridPosition = hexCell2.Neighbors[neighborIndex2].GridPosition,
+            IsTraversable = false
+        };
+        _hexPathFinder.UpdatePathNodeNeighbors(hexCell2.GridPosition, hexCell2.Neighbors);
 
         // for (var i = 0; i < 10000; i++)
         // {
@@ -213,7 +257,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
             });
         }
         
-        // move the hex grid character around
+        // move the hex grid characters around
         if (!_hexPathCharacter.HasPath)
         {
             var randomTile = _hexGrid.Cells.Where(p => p.IsPassable).ToList().PickRandom();
@@ -228,6 +272,23 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
             {
                 Log.Info($"Hex Path: {_hexPathCharacter.CurrentPathNodeIndex}/{_hexPathCharacter.Path.Count - 1}");
                 _hexPathCharacterGridPosition = _hexPathCharacter.CurrentPathNode.GridPosition;
+            });
+        }
+        
+        if (!_hexPathCharacter2.HasPath)
+        {
+            var nextTile = _hexGrid.GetCellAtCoordinate(_hexPathCharacterGridPosition2 == new Vector2Int(5, 4) ? new Vector2Int(5, 5) : new Vector2Int(5, 4));
+            var path = _hexPathFinder.FindPath(_hexPathCharacterGridPosition2, nextTile.Coordinate);
+            _hexPathCharacter2.SetPath(path);
+        }
+        else
+        {
+            var nextPathNodeWorldPosition = _hexGrid.GetCellAtCoordinate(_hexPathCharacter2.GetNextPathNode()!.ToVector2Int())!.WorldPosition;
+            new Tween(_hexPathCharacter2, nameof(_hexPathCharacter2.Position), _hexPathCharacter2.Position,
+                nextPathNodeWorldPosition, 1f).OnFinished(() =>
+            {
+                Log.Info($"Hex Path 2: {_hexPathCharacter2.CurrentPathNodeIndex}/{_hexPathCharacter2.Path.Count - 1}");
+                _hexPathCharacterGridPosition2 = _hexPathCharacter2.CurrentPathNode.GridPosition;
             });
         }
     }

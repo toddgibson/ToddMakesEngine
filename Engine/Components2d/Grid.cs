@@ -157,7 +157,7 @@ public class Grid : Component2d
                     
                 Raylib.DrawRectangleLines((int)cell.WorldPosition.X, (int)cell.WorldPosition.Y, 
                     (int)cell.ScaledSize.X, (int)cell.ScaledSize.Y, BorderColor);
-                Raylib.DrawCircle((int)cell.WorldCenter.X, (int)cell.WorldCenter.Y, 2 * Scale.X, BorderColor);
+                Raylib.DrawCircleV(cell.WorldCenter, 2 * Scale.X, BorderColor);
                 Raylib.DrawText($"{cell.Coordinate.X},{cell.Coordinate.Y}", (int)cell.WorldPosition.X + 5, (int)cell.WorldPosition.Y + 5, 10, BorderColor);
             }
         }

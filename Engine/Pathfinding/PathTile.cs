@@ -9,5 +9,5 @@ public class PathTile
     public byte Weight { get; set; } = 1;
 
     [field: NonSerialized]
-    public virtual List<Vector2Int> NeighborPositions { get; set; } = [];
+    public virtual List<PathingNeighbor> NeighborPositions { get; set; } = [];
 }
