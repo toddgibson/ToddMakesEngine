@@ -46,6 +46,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         var tileTexture = AssetManager.GetTexture("test-tile");
         var tileTextureHex = AssetManager.GetTexture("test-tile-hex");
         var tileTextureHexWall = AssetManager.GetTexture("test-tile-hex-wall");
+        var campFireTexture = AssetManager.GetTexture("campfire");
         _soundEffect = new SoundEffect(scream);
         _song = new Song(AssetManager.GetSong("peace"));
         
@@ -190,20 +191,35 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         };
         _hexPathFinder.UpdatePathNodeNeighbors(hexCell2.GridPosition, hexCell2.Neighbors);
 
-        // for (var i = 0; i < 10000; i++)
-        // {
-        //     e.AddComponent2D(new Sprite()
-        //     {
-        //         Texture = spriteTexture,
-        //         Mode = SpriteMode.Framed,
-        //         FrameSize = Vector2.One * 16,
-        //         CurrentFrame = Random.Range(0, 4),
-        //         LocalPosition = Random.Vector2(-250, 250),
-        //         PivotPoint = new Vector2(0.5f * 16, 0.5f * 16),
-        //         Size = new Vector2(16, 16),
-        //         Scale = Vector2.One * 3
-        //     });
-        // }
+        for (var i = 0; i < 10000; i++)
+        {
+            e.AddComponent2D(new Sprite()
+            {
+                Texture = spriteTexture,
+                Mode = SpriteMode.Framed,
+                FrameSize = Vector2.One * 16,
+                CurrentFrame = Random.Range(0, 4),
+                LocalPosition = Random.Vector2(-250, 250),
+                PivotPoint = new Vector2(0.5f * 16, 0.5f * 16),
+                Size = new Vector2(16, 16),
+                Scale = Vector2.One * 3
+            });
+        }
+
+        AddEntity(new Entity("campfire")
+            {
+                Position = new Vector2(100, 450)
+            })
+            .AddComponent2D(new Sprite()
+            {
+                Texture = campFireTexture,
+                Mode = SpriteMode.Framed,
+                FrameSize = Vector2.One * 64,
+                CurrentFrame = 0,
+                Size = new Vector2(64, 64),
+                AnimationEnabled = true,
+                FramesPerSecond = 10
+            });
     }
 
     protected override void Activated()

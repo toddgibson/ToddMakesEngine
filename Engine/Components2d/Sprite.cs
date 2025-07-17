@@ -50,6 +50,10 @@ public class Sprite : Component2d
     public Texture2D Texture { get; set; }
     public Color Tint { get; set; } = Color.White;
     public SpriteMode Mode { get; set; } = SpriteMode.Single;
+    public bool AnimationEnabled { get; set; } = false;
+    public float FramesPerSecond { get; set; } = 0f;
+    private float _frameDuration => 1f / FramesPerSecond;
+    private float _animationTimer = 0f;
     public Vector2 FrameSize { get; set; } = Vector2.NaN;
     
     public bool EnableOutlineShader { get; set; }
@@ -71,6 +75,19 @@ public class Sprite : Component2d
     private float _frameHeight => Mode == SpriteMode.Single ? Texture.Height : FrameSize.Y;
     
     private int FrameCount => Mode == SpriteMode.Single ? 1 : Texture.Width / (int)FrameSize.X;
+
+    internal override void Update(float deltaTime)
+    {
+        if (AnimationEnabled && FramesPerSecond > 0)
+        {
+            _animationTimer += deltaTime;
+            if (_animationTimer >= _frameDuration)
+            {
+                _animationTimer = 0f;
+                CurrentFrame++;
+            } 
+        }
+    }
 
     internal override void Draw()
     {

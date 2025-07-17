@@ -62,6 +62,10 @@
       <Content Include="Assets\grass_10_wall.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Remove="Assets\CampFireFinished.png" />
+      <Content Include="Assets\CampFireFinished.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
