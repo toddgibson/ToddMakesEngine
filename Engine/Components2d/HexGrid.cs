@@ -15,7 +15,9 @@ public class HexGrid : Component2d
 
     public float CellSize { get; set; } = 1f;
     public Color BorderColor { get; set; } = Color.RayWhite;
-    public bool DrawDebug { get; set; } = true;
+    public bool DrawDebugLines { get; set; } = false;
+    public bool DrawDebugCoordinates { get; set; } = false;
+    public bool DrawDebugSidePoints { get; set; } = false;
     public Style GridStyle { get; set; } = Style.PointyTop;
     public List<HexGridCell> Cells { get; set; } = [];
     
@@ -59,7 +61,6 @@ public class HexGrid : Component2d
                 {
                     cell.CornerPoints.Add(CalculateCornerWorldPosition(worldPosition, i));
                 }
-                CalculateSideCenterPoints(cell);
                 var cornersToDraw = cell.CornerPoints;
                 cornersToDraw.Add(cornersToDraw[0]);
                 cell.CornerPointsToDraw = cornersToDraw.ToArray();
@@ -73,19 +74,20 @@ public class HexGrid : Component2d
             for (var y = 0; y < Size.Y; y++)
             {
                 var cell = GetCellAtCoordinate(new Vector2Int(x, y));
-                if (cell != null) 
-                    CalculateNeighbors(cell);
+                if (cell == null) continue;
+                
+                CalculateNeighbors(cell);
+                CalculateSideCenterPoints(cell);
             }
         }
     }
 
     private void CalculateSideCenterPoints(HexGridCell cell)
     {
-        for (var i = 0; i < cell.CornerPoints.Count; i++)
+        for (var i = 0; i < cell.Neighbors.Count; i++)
         {
-            var corner = cell.CornerPoints[i];
-            var nextCorner = i < cell.CornerPoints.Count - 1 ? cell.CornerPoints[i + 1] : cell.CornerPoints[0];
-            cell.SideCenterPoints.Add(Raymath.Vector2Lerp(corner, nextCorner, 0.5f));
+            var neighbor = cell.Neighbors[i];
+            cell.SideCenterPoints.Add(Raymath.Vector2Lerp(cell.WorldPosition, neighbor.WorldPosition, 0.5f));
         }
     }
 
@@ -240,13 +242,16 @@ public class HexGrid : Component2d
                 Raylib.DrawTexturePro(cell.CellTexture.Value, cell.CellTextureRect.Value, cell.DrawRect, Vector2.Zero, 0f, Color.White);
             }
                 
-            if (!DrawDebug) continue;
-            
-            Raylib.DrawLineStrip(cell.CornerPointsToDraw, cell.CornerPoints.Count, BorderColor);
-            Raylib.DrawText($"{cell.Coordinate.X},{cell.Coordinate.Y}", (int)cell.WorldPosition.X - 5, (int)cell.WorldPosition.Y - 5, 10, BorderColor);
-            for (var c = 0; c < cell.SideCenterPoints.Count; c++)
+            if (DrawDebugLines)
+                Raylib.DrawLineStrip(cell.CornerPointsToDraw, cell.CornerPoints.Count, BorderColor);
+            if (DrawDebugCoordinates)
+                Raylib.DrawText($"{cell.Coordinate.X},{cell.Coordinate.Y}", (int)cell.WorldPosition.X - 5, (int)cell.WorldPosition.Y - 5, 10, BorderColor);
+            if (DrawDebugSidePoints)
             {
-                Raylib.DrawCircleV(cell.SideCenterPoints[c], 2 * Scale.X, BorderColor);
+                for (var c = 0; c < cell.SideCenterPoints.Count; c++)
+                {
+                    Raylib.DrawCircleV(cell.SideCenterPoints[c], 2 * Scale.X, BorderColor);
+                }
             }
         }
     }
@@ -272,7 +277,7 @@ public class HexGridCell
     {
         get
         {
-            var size = new Vector2(CellSize.X * (float)Math.Sqrt(3), CellSize.Y * 2);
+            var size = new Vector2(CellSize.X * (float)Math.Sqrt(3), CellSize.Y * 2.02f);
             _drawRect ??= new Rectangle(WorldPosition - CellSize + new Vector2(CellSize.X / 8, 0), size);
             return _drawRect.Value;
         }

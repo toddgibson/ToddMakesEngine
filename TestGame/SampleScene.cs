@@ -115,7 +115,11 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         });
         _pathCharacterGridPosition = Vector2Int.Zero;
 
-        _hexGrid = new HexGrid(new Vector2(8, 8), HexGrid.Style.PointyTop, 32);
+        _hexGrid = new HexGrid(new Vector2(8, 8), HexGrid.Style.PointyTop, 39)
+        {
+            DrawDebugLines = true,
+            DrawDebugSidePoints = true
+        };
         AddEntity(new Entity("HexGridEntity")
             {
                 Position = new Vector2(464f, 80f)
