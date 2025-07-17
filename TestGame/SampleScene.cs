@@ -38,7 +38,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
     
     protected override void Initialize()
     {
-        AddUiComponent(new Button("btnSpin", Name == "SampleScene" ? "Spin Me!" : "Whoa Dude!", HandleButtonClickAsync));
+        AddUiComponent(new Button("btnSpin", Name == "SampleScene" ? "Spin Me!" : "Whoa Dude!", HandleButtonClick));
         _label = AddUiComponent(new Label("lblHello", "Hello World!"));
 
         var spriteTexture = AssetManager.GetTexture("adventurers");
@@ -313,7 +313,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         }
     }
 
-    private Task HandleButtonClickAsync(Button button)
+    private void HandleButtonClick(Button button)
     {
         var toPosition = new Vector2(
             Random.Range(-(Game.Settings.ScreenWidth / 2), Game.Settings.ScreenWidth / 2),
@@ -349,8 +349,6 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
                     Game.SetActiveScene(Random.Range(0, 100) > 50 ? "SampleScene" : "SampleScene2");
                 }
             });
-        
-        return Task.CompletedTask;
     }
 
     protected override void Update(float deltaTime)
