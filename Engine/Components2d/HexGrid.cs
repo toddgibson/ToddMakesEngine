@@ -15,7 +15,7 @@ public class HexGrid : Component2d
 
     public float CellSize { get; set; } = 1f;
     public Color BorderColor { get; set; } = Color.RayWhite;
-    public bool DrawGridLines { get; set; } = true;
+    public bool DrawDebug { get; set; } = true;
     public Style GridStyle { get; set; } = Style.PointyTop;
     public List<HexGridCell> Cells { get; set; } = [];
     
@@ -62,6 +62,7 @@ public class HexGrid : Component2d
                 var cornersToDraw = cell.CornerPoints;
                 cornersToDraw.Add(cornersToDraw[0]);
                 cell.CornerPointsToDraw = cornersToDraw.ToArray();
+                cell.CellSize = Vector2.One * CellSize;
                 Cells.Add(cell);
             }
         }
@@ -199,6 +200,15 @@ public class HexGrid : Component2d
         return Cells.AsValueEnumerable().FirstOrDefault(cell => cell.Coordinate.Equals(coordinate));
     }
     
+    public void SetCellTexture(Vector2Int coordinate, Texture2D texture)
+    {
+        var cell = GetCellAtCoordinate(coordinate);
+        if (cell == null) return;
+        
+        cell.CellTexture = texture;
+        cell.CellTextureRect = new Rectangle(Vector2.Zero, new Vector2(texture.Width, texture.Height));
+    }
+    
     internal override void Update(float deltaTime)
     {
         if (_lastGlobalPosition != GlobalPosition || _lastScale != Scale)
@@ -213,11 +223,16 @@ public class HexGrid : Component2d
         for (var i = 0; i < Cells.Count; i++)
         {
             var cell = Cells[i];
-            if (DrawGridLines)
+            
+            if (cell is { CellTexture: not null, CellTextureRect: not null })
             {
-                Raylib.DrawLineStrip(cell.CornerPointsToDraw, cell.CornerPoints.Count, BorderColor);
-                Raylib.DrawText($"{cell.Coordinate.X},{cell.Coordinate.Y}", (int)cell.WorldPosition.X - 5, (int)cell.WorldPosition.Y - 5, 10, BorderColor);
+                Raylib.DrawTexturePro(cell.CellTexture.Value, cell.CellTextureRect.Value, cell.DrawRect, Vector2.Zero, 0f, Color.White);
             }
+                
+            if (!DrawDebug) continue;
+            
+            Raylib.DrawLineStrip(cell.CornerPointsToDraw, cell.CornerPoints.Count, BorderColor);
+            Raylib.DrawText($"{cell.Coordinate.X},{cell.Coordinate.Y}", (int)cell.WorldPosition.X - 5, (int)cell.WorldPosition.Y - 5, 10, BorderColor);
         }
     }
 }
@@ -232,8 +247,20 @@ public class HexGridCell
     
     public Texture2D? CellTexture { get; set; }
     public Rectangle? CellTextureRect { get; set; }
+    public Vector2 CellSize { get; set; }
         
     public List<HexGridCell> Neighbors { get; set; } = [];
     public bool IsPassable { get; set; } = true;
     public byte PathWeight { get; set; } = 1;
+    
+    private Rectangle? _drawRect;
+    internal Rectangle DrawRect
+    {
+        get
+        {
+            var size = new Vector2(CellSize.X * (float)Math.Sqrt(3), CellSize.Y * 2);
+            _drawRect ??= new Rectangle(WorldPosition - CellSize + new Vector2(CellSize.X / 8, 0), size);
+            return _drawRect.Value;
+        }
+    }
 }

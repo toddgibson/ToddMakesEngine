@@ -8,8 +8,8 @@ public class Grid : Component2d
 {
     public int CellSize { get; set; }
     public Color BorderColor { get; set; } = Color.RayWhite;
-    
-    public bool DrawGridLines { get; set; }
+
+    public bool DrawDebug { get; set; } = true;
     public List<GridCell> Cells { get; set; } = [];
 
     private Vector2 _lastGlobalPosition = Vector2.NaN;
@@ -153,11 +153,12 @@ public class Grid : Component2d
                     Raylib.DrawTexturePro(cell.CellTexture.Value, cell.CellTextureRect.Value, cell.DrawRect, Vector2.Zero, 0f, Color.White);
                 }
                 
-                if (!DrawGridLines) continue;
+                if (!DrawDebug) continue;
                     
                 Raylib.DrawRectangleLines((int)cell.WorldPosition.X, (int)cell.WorldPosition.Y, 
                     (int)cell.ScaledSize.X, (int)cell.ScaledSize.Y, BorderColor);
                 Raylib.DrawCircle((int)cell.WorldCenter.X, (int)cell.WorldCenter.Y, 2 * Scale.X, BorderColor);
+                Raylib.DrawText($"{cell.Coordinate.X},{cell.Coordinate.Y}", (int)cell.WorldPosition.X + 5, (int)cell.WorldPosition.Y + 5, 10, BorderColor);
             }
         }
     }

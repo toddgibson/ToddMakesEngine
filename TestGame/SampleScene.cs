@@ -41,6 +41,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         var spriteTexture = AssetManager.GetTexture("adventurers");
         var scream = AssetManager.GetSound("scream");
         var tileTexture = AssetManager.GetTexture("test-tile");
+        var tileTextureHex = AssetManager.GetTexture("test-tile-hex");
         _soundEffect = new SoundEffect(scream);
         _song = new Song(AssetManager.GetSong("peace"));
         
@@ -110,12 +111,16 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         });
         _pathCharacterGridPosition = Vector2Int.Zero;
 
-        _hexGrid = new HexGrid(new Vector2(8, 8), HexGrid.Style.FlatTop, 24);
+        _hexGrid = new HexGrid(new Vector2(8, 8), HexGrid.Style.PointyTop, 32);
         AddEntity(new Entity("HexGridEntity")
             {
                 Position = new Vector2(464f, 80f)
             })
             .AddComponent2D(_hexGrid);
+        foreach (var cell in _hexGrid.Cells)
+        {
+            _hexGrid.SetCellTexture(cell.Coordinate, tileTextureHex);
+        }
         
         _hexPathFinder = new AstarPathfinder((int)_hexGrid.Size.X, (int)_hexGrid.Size.Y, _hexGrid.Cells);
 
@@ -130,7 +135,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
             Mode = SpriteMode.Framed,
             FrameSize = Vector2.One * 16,
             CurrentFrame = 2,
-            LocalPosition = new Vector2(-4, -12) * 3,
+            LocalPosition = new Vector2(-4.5f, -11f) * 3,
             PivotPoint = new Vector2(0.5f * 16, 0.5f * 16),
             Size = new Vector2(16, 16),
             Scale = Vector2.One * 3
