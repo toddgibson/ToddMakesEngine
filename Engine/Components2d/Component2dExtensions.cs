@@ -51,14 +51,8 @@ public static class Component2dExtensions
         throw new Exception($"Cannot tween color. Component '{tween.Component2d}' is not the correct type.");
     }
 
-    public static bool IsWithinScreenBounds(this Component2d component, int screenWidth, int screenHeight)
+    public static bool IsWithinVisibleBounds(this Component2d component, Rectangle cameraBounds)
     {
-        if (component.GlobalPosition.X + (component.Size.X * 0.5f) < 0
-            || component.GlobalPosition.X - (component.Size.X * 0.5f) > screenWidth
-            || component.GlobalPosition.Y + (component.Size.Y * 0.5f) < 0
-            || component.GlobalPosition.Y - (component.Size.Y * 0.5f) > screenHeight)
-            return false;
-        
-        return true;
+        return Raylib.CheckCollisionRecs(component.WorldRectangle, cameraBounds);
     }
 }

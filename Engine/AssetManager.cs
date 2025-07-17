@@ -8,9 +8,10 @@ public static class AssetManager
     private static readonly Dictionary<string, Sound> Sounds = new();
     private static readonly Dictionary<string, Music> Songs = new();
     
-    public static Texture2D LoadTexture(string path, string key = "")
+    public static Texture2D LoadTexture(string path, string key = "", TextureFilter filterMode = TextureFilter.Point)
     {
         var asset = Raylib.LoadTexture(path);
+        Raylib.SetTextureFilter(asset, filterMode);
         Textures[string.IsNullOrEmpty(key) ? Path.GetFileNameWithoutExtension(path) : key] = asset;
         return asset;
     }

@@ -1,5 +1,6 @@
 using System.Data;
 using System.Diagnostics;
+using System.Numerics;
 using System.Runtime.InteropServices.JavaScript;
 using Engine.Systems;
 using Raylib_cs;
@@ -11,6 +12,14 @@ public abstract class Game(GameSettings settings) : IDisposable
 {
     public readonly GameSettings Settings = settings;
     public readonly SceneManager SceneManager = new();
+    public Camera2D MainCamera = new(Vector2.Zero, Vector2.Zero, 0f, 0f);
+    public Rectangle CameraBounds => new(
+        Raylib.GetScreenToWorld2D(Vector2.Zero, MainCamera), // top-left world corner
+        new Vector2(
+            Raylib.GetScreenWidth() / MainCamera.Zoom,
+            Raylib.GetScreenHeight() / MainCamera.Zoom
+        )
+    );
     
     public bool DisplayFrameData = false;
 
@@ -19,13 +28,17 @@ public abstract class Game(GameSettings settings) : IDisposable
     private double AverageFrameDrawTime => _frameDrawTimes.Average();
     private readonly List<double> _frameUpdateTimes = [];
     private double AverageFrameUpdateTime => _frameUpdateTimes.Average();
-    private double AverageFrameTime => AverageFrameDrawTime +  AverageFrameUpdateTime;
+    private double AverageFrameTime => AverageFrameDrawTime + AverageFrameUpdateTime;
 #endif
 
     internal void InitializeInternal()
     {
         UiSystem.Initialize();
         Initialize();
+        
+        MainCamera.Target = new Vector2(Settings.ScreenWidth * 0.5f, Settings.ScreenHeight * 0.5f);
+        MainCamera.Offset = new Vector2(Settings.ScreenWidth * 0.5f, Settings.ScreenHeight * 0.5f);
+        MainCamera.Zoom = 1f;
     }
 
     protected virtual void Initialize() { }
@@ -76,6 +89,7 @@ public abstract class Game(GameSettings settings) : IDisposable
         Raylib.ClearBackground(Settings.ClearColor);
         
         // DRAW GAME COMPONENTS
+        Raylib.BeginMode2D(MainCamera);
 #if DEBUG
         _frameTimer.Restart();
 #endif
@@ -88,6 +102,7 @@ public abstract class Game(GameSettings settings) : IDisposable
         if (_frameDrawTimes.Count > 100)
             _frameDrawTimes.RemoveAt(0);
 #endif
+        Raylib.EndMode2D();
         // END DRAW GAME COMPONENTS
         
         // DRAW UI

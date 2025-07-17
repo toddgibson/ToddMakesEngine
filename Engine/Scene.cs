@@ -60,7 +60,7 @@ public abstract class Scene(Game game, string name)
             .Where(p => p.Active)
             .SelectMany(p => p.Component2Ds)
             .Where(p => p.Active 
-                        && p.IsWithinScreenBounds(Game.Settings.ScreenWidth, Game.Settings.ScreenHeight))
+                        && p.IsWithinVisibleBounds(Game.CameraBounds))
             .OrderBy(p => p.DrawLayer)
             .ThenBy(p => p.GlobalPosition.Y);
         

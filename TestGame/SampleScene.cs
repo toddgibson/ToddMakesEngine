@@ -8,6 +8,7 @@ using Engine.Numerics;
 using Engine.Pathfinding;
 using Engine.Systems;
 using Engine.Ui.Components;
+using Raylib_cs;
 using Random = Engine.Random;
 
 namespace TestGame;
@@ -368,5 +369,10 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
 
         var spriteComponents = entity.GetComponentsOfType<Sprite>();
         spriteComponents.ElementAt(Random.Range(0, spriteComponents.Count - 1)).DrawLayer++;
+        
+        if (Raylib.IsKeyDown(KeyboardKey.Right))
+            Game.MainCamera.Target.X += 200 * deltaTime;
+        if (Raylib.IsKeyDown(KeyboardKey.Left))
+            Game.MainCamera.Target.X -= 200 * deltaTime;
     }
 }
