@@ -103,6 +103,21 @@ var sampleGame = new SampleGame(new GameSettings()
 EngineManager.Run(sampleGame);
 ```
 
+## Assets
+In your *.csproj* file, make sure asset folders and files are set to copy during the build, or they will not load properly.
+```xml
+<ItemGroup>
+  <Folder Include="Assets\" />
+</ItemGroup>
+
+<ItemGroup>
+  <None Remove="Assets\campfire.png" />
+  <Content Include="Assets\campfire.png">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+</ItemGroup>
+```
+
 ## More Samples
 
 Look at the sample projects for reference on how to set up scenes, entities, and components.
