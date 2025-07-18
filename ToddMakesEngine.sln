@@ -1,10 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestGame", "TestGame\TestGame.csproj", "{3B409FD1-1C11-478F-B6F5-98B08E6D2637}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestGame", "Samples\TestGame\TestGame.csproj", "{3B409FD1-1C11-478F-B6F5-98B08E6D2637}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{855E2096-ABF7-4C18-B7EA-336DB0782D37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicGame", "BasicGame\BasicGame.csproj", "{20E3C27A-7DB3-4C0B-9767-B5BB673E1FE3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicGame", "Samples\BasicGame\BasicGame.csproj", "{20E3C27A-7DB3-4C0B-9767-B5BB673E1FE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

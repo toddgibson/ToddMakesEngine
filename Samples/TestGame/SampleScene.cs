@@ -13,6 +13,35 @@ using Random = Engine.Random;
 
 namespace TestGame;
 
+public class SimpleScene(Game game, string name = "SimpleScene") : Scene(game, name)
+{
+    protected override void Initialize()
+    {
+        // Initialize entities with components
+        AddEntity(new Entity("SimpleEntity"))
+            .AddComponent2D(new Sprite()
+            {
+                Texture = AssetManager.GetTexture("campfire")
+            });
+    }
+
+    protected override void Activated()
+    {
+        // Optional: Do something when the scene becomes active
+        AssetManager.GetSong("peace-song").Play();
+    }
+
+    protected override void Deactivated()
+    {
+        // Optional: Do something when the scene deactivates
+    }
+
+    protected override void Update(float deltaTime)
+    {
+        // Optional: Do something every frame
+    }
+}
+
 public class SampleScene(Game game, string name = "SampleScene") : Scene(game, name)
 {
     private const bool UseSceneNavigation = true;
@@ -43,13 +72,12 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         _label = AddUiComponent(new Label("lblHello", "Hello World!"));
 
         var spriteTexture = AssetManager.GetTexture("adventurers");
-        var scream = AssetManager.GetSound("scream");
         var tileTexture = AssetManager.GetTexture("test-tile");
         var tileTextureHex = AssetManager.GetTexture("test-tile-hex");
         var tileTextureHexWall = AssetManager.GetTexture("test-tile-hex-wall");
         var campFireTexture = AssetManager.GetTexture("campfire");
-        _soundEffect = new SoundEffect(scream);
-        _song = new Song(AssetManager.GetSong("peace"));
+        _soundEffect = AssetManager.GetSound("scream");
+        _song = AssetManager.GetSong("peace");
         
 
         // add entity...
