@@ -7,23 +7,27 @@ This project is available under the MIT license.
 
 ## Dependencies
 
+.Net 9.0
 - [Raylib_cs](https://github.com/raylib-cs/raylib-cs) - Raylib C# bindings
 - [Zlinq](https://github.com/Cysharp/ZLinq) - Zero-allocation Linq
 
 ## Engine Features
 
-- Entity Component System (ECS)
+- Entities/Components Based (not a true ECS)
 - 2D sprite rendering with animation support
-- Grid-based and Hexagonal grid pathfinding (A* algorithm)
-- UI system with buttons and labels
+- Asset management
 - Scene management
+- Grid components (square & hex)
+- Pathfinding (A* algorithm)
+- UI components with anchoring
 - Sound effects and music playback
 - Camera controls
 - Tweening system for smooth animations
+- GLSL Shader support
 
 ## Sample Game
 
-The sample game demonstrates the engine's capabilities through the following features:
+The TestGame project demonstrates the engine's capabilities through the following features:
 
 ### Scene Setup
 - Interactive UI with a spinning button
@@ -31,36 +35,31 @@ The sample game demonstrates the engine's capabilities through the following fea
 - Multiple animated sprite characters
 - Grid-based movement demonstration
 - Hexagonal grid pathfinding
-- Campfire animation
+- Campfire animated sprite
 
 ### Controls
 - Arrow keys (Left/Right) to move the camera
 - Click the "Spin Me!" button to trigger animations and scene transitions
 
-### Notable Components
+## Creating a Game
 
-1. **Grid System**
-   - Square grid (8x8)
-   - Hexagonal grid (8x8)
-   - Path-finding characters that navigate both grid types
+1. Create a C# console app project
+2. Add a reference to the engine library
+3. Create a class with Engine.Game as its base class
 
-2. **Characters**
-   - Multiple sprite-based characters with frame animations
-   - Automated pathfinding movement
-   - Random path selection
+`
+using Engine; 
+using TestGame;
 
-3. **Visual Effects**
-   - Color tweening
-   - Rotation animations
-   - Position interpolation
-   - Particle-like sprite system
+var sampleGame = new SampleGame(new GameSettings()
+{
+GameTitle = "Sample Game",
+TargetFrameRate = 60
+});
 
-## Getting Started
-
-1. Ensure you have .NET 9.0 installed
-2. Clone the repository
-3. Open the solution in your preferred IDE
-4. Run `Program.cs` to start the sample game
+EngineManager.Run(sampleGame);
+`
+4. Look at the sample projects for reference on how to set up your scenes, entities, and components.
 
 ## Project Structure
 
