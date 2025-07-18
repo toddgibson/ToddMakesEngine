@@ -25,6 +25,26 @@ This project is available under the MIT license.
 - Tweening system for smooth animations
 - GLSL Shader support
 
+## Getting Started
+
+1. Create a C# console app project
+2. Add a reference to the engine library
+3. Create a class with Engine.Game as its base class
+
+```
+using Engine; 
+using TestGame;
+
+var sampleGame = new SampleGame(new GameSettings()
+{
+GameTitle = "Sample Game",
+TargetFrameRate = 60
+});
+
+EngineManager.Run(sampleGame);
+```
+4. Look at the sample projects for reference on how to set up your scenes, entities, and components.
+
 ## Sample Game
 
 The TestGame project demonstrates the engine's capabilities through the following features:
@@ -41,33 +61,3 @@ The TestGame project demonstrates the engine's capabilities through the followin
 - Arrow keys (Left/Right) to move the camera
 - Click the "Spin Me!" button to trigger animations and scene transitions
 
-## Creating a Game
-
-1. Create a C# console app project
-2. Add a reference to the engine library
-3. Create a class with Engine.Game as its base class
-
-`
-using Engine; 
-using TestGame;
-
-var sampleGame = new SampleGame(new GameSettings()
-{
-GameTitle = "Sample Game",
-TargetFrameRate = 60
-});
-
-EngineManager.Run(sampleGame);
-`
-4. Look at the sample projects for reference on how to set up your scenes, entities, and components.
-
-## Project Structure
-
-The main components can be found in:
-- `SampleGame.cs` - Contains the sample scene implementation
-- `Program.cs` - Entry point and game initialization
-
-## Dependencies
-
-- .NET 9.0
-- Raylib-cs
