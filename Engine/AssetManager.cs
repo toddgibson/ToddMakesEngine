@@ -1,3 +1,4 @@
+using Engine.Components2d;
 using Raylib_cs;
 
 namespace Engine;
@@ -37,10 +38,10 @@ public static class AssetManager
         return asset;
     }
     
-    public static Sound GetSound(string key)
+    public static SoundEffect GetSound(string key, float volume = 1f, float pitch = 1f)
     {
         if (Sounds.TryGetValue(key, out var asset))
-            return asset;
+            return new SoundEffect(asset, volume, pitch);
         throw new KeyNotFoundException($"Sound with key '{key}' was not found.");
     }
 
@@ -58,10 +59,10 @@ public static class AssetManager
         return asset;
     }
     
-    public static Music GetSong(string key)
+    public static Song GetSong(string key, float volume = 1f, float pitch = 1f, bool loop = true)
     {
         if (Songs.TryGetValue(key, out var asset))
-            return asset;
+            return new Song(asset, volume, pitch, loop);
         throw new KeyNotFoundException($"Song with key '{key}' was not found.");
     }
 

@@ -60,23 +60,32 @@ public class SimpleScene(Game game, string name = "SimpleScene") : Scene(game, n
         AddEntity(new Entity("SimpleEntity"))
             .AddComponent2D(new Sprite()
             {
-                Texture = AssetManager.GetTexture("campfire")
+                Texture = AssetManager.GetTexture("campfire"),
+                Mode = SpriteMode.Framed,
+                FrameSize = Vector2.One * 64,
+                CurrentFrame = 0,
+                Size = new Vector2(64, 64),
+                AnimationEnabled = true,
+                FramesPerSecond = 10,
             });
     }
 
-    protected override void Activated()
+    // Optional: Do something when the scene becomes active
+    protected override void Activated() 
     {
-        // Optional: Do something when the scene becomes active
+        AssetManager.GetSong("peace-song").Play();
     }
 
-    protected override void Deactivated()
-    {
-        // Optional: Do something when the scene deactivates
-    }
+    // Optional: Do something when the scene deactivates
+    protected override void Deactivated() { }
 
-    protected override void Update(float deltaTime)
+    // Optional: Do something every frame
+    protected override void Update(float deltaTime) 
     {
-        // Optional: Do something every frame
+        if (Raylib.IsKeyDown(KeyboardKey.Right))
+            Game.MainCamera.Target.X += 200 * deltaTime;
+        if (Raylib.IsKeyDown(KeyboardKey.Left))
+            Game.MainCamera.Target.X -= 200 * deltaTime;
     }
 }
 ```
