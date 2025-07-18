@@ -27,11 +27,9 @@ This project is available under the MIT license.
 
 ## Getting Started
 
-1. Create a C# console app project
-2. Add a reference to the engine library
-
-### Create a Game class
-
+### 1. Create a C# console app project 
+### 2. Add a reference to the engine library
+### 3. Create a Game class
 ```csharp
 public class SampleGame(GameSettings settings) : Game(settings)
 {
@@ -52,9 +50,7 @@ public class SampleGame(GameSettings settings) : Game(settings)
     }
 }
 ```
-
-### Create a Scene class
-
+### 4. Create a Scene class
 ```csharp
 public class SimpleScene(Game game, string name = "SimpleScene") : Scene(game, name)
 {
@@ -84,9 +80,7 @@ public class SimpleScene(Game game, string name = "SimpleScene") : Scene(game, n
     }
 }
 ```
-
-### Run your game from *Program.cs* 
-
+### 5. Call Run from *Program.cs*
 ```csharp
 using Engine; 
 using TestGame;
@@ -100,7 +94,7 @@ var sampleGame = new SampleGame(new GameSettings()
 EngineManager.Run(sampleGame);
 ```
 
-## Sample Game
+## More Samples
 
 Look at the sample projects for reference on how to set up scenes, entities, and components.
 The TestGame project demonstrates the engine's capabilities through the following features:
