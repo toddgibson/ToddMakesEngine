@@ -31,7 +31,7 @@ This project is available under the MIT license.
 2. Add a reference to the engine library
 3. Create a class with Engine.Game as its base class
 
-```
+```csharp
 using Engine; 
 using TestGame;
 
