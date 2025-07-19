@@ -145,28 +145,21 @@ The TestGame project demonstrates the engine's capabilities through the followin
 
 ## 2D Components
 
-### Current
-- Grid
-- Hex Grid
-- Sprite
-- Sound Effect
-- Song
-
-### Planned
- 
-- Isometric Grid
-- Particles
+| Current      | Planned         |
+|--------------|-----------------|
+| Grid         | Isometric Grid  |
+| Hex Grid     | Particle Effect |
+| Sprite       |                 |
+| Sound Effect |                 |
+| Song         |                 |
 
 ---
 
 ## UI Components
 
-### Current
-- Button
-- Label
-
-### Planned
-- Panel
-- Slider
-- Toggle
-- Progress Bar
+| Current | Planned      |
+|---------|--------------|
+| Button  | Panel        |
+| Label   | Slider       |
+|         | Toggle       |
+|         | Progress Bar |
