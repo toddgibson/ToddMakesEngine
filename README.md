@@ -15,7 +15,7 @@ This project is available under the MIT license.
 
 ## Features
 
-- Entities/Components Based (not a true ECS)
+- Entities/Components Based, organized in Scenes
 - 2D sprite rendering with animation support
 - Asset management
 - Scene management
@@ -124,25 +124,6 @@ In your *.csproj* file, make sure asset folders and files are set to copy during
 
 ---
 
-## More Samples
-
-Look at the sample projects for reference on how to set up scenes, entities, and components.
-The TestGame project demonstrates the engine's capabilities through the following features:
-
-### Scene Setup
-- Interactive UI with a spinning button
-- Bouncing "Hello World" label
-- Multiple animated sprite characters
-- Grid-based movement demonstration
-- Hexagonal grid pathfinding
-- Campfire animated sprite
-
-### Controls
-- Arrow keys (Left/Right) to move the camera
-- Click the "Spin Me!" button to trigger animations and scene transitions
-
----
-
 ## 2D Components
 
 | Current      | Planned         |
@@ -163,3 +144,24 @@ The TestGame project demonstrates the engine's capabilities through the followin
 | Label        | Slider          |
 |              | Toggle          |
 |              | Progress Bar    |
+
+---
+
+## More Samples
+
+Look at the sample projects for reference on how to set up scenes, entities, and components.
+The TestGame project demonstrates the engine's capabilities through the following features:
+
+### Scene Setup
+- Interactive UI with a spinning button
+- Bouncing "Hello World" label
+- Multiple animated sprite characters
+- Grid-based movement demonstration
+- Hexagonal grid pathfinding
+- Campfire animated sprite
+
+### Controls
+- Arrow keys (Left/Right) to move the camera
+- Click the "Spin Me!" button to trigger animations and scene transitions
+
+---
