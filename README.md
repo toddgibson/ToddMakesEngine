@@ -19,12 +19,13 @@ This project is available under the MIT license.
 - 2D sprite rendering with animation support
 - Asset management
 - Scene management
+- State machines
 - Grid components (square & hex)
 - Pathfinding (A* algorithm)
 - UI components with anchoring
 - Sound effects and music playback
 - Camera controls
-- Tweening system for smooth animations
+- Tween system for smooth animations
 - GLSL Shader support
 
 ---
