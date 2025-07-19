@@ -5,9 +5,11 @@ This is a simple 2D game engine built with C# and [Raylib](https://github.com/ra
 This project is available under the MIT license. 
 [Raylib](https://github.com/raysan5/raylib) and the [Raylib_cs](https://github.com/raylib-cs/raylib-cs) language bindings are available under their respective licenses.
 
+---
+
 ## Dependencies
 
-.Net 9.0
+- .Net 9.0+
 - [Raylib_cs](https://github.com/raylib-cs/raylib-cs) - Raylib C# bindings
 - [Zlinq](https://github.com/Cysharp/ZLinq) - Zero-allocation Linq
 
@@ -24,6 +26,8 @@ This project is available under the MIT license.
 - Camera controls
 - Tweening system for smooth animations
 - GLSL Shader support
+
+---
 
 ## Getting Started
 
@@ -118,6 +122,8 @@ In your *.csproj* file, make sure asset folders and files are set to copy during
 </ItemGroup>
 ```
 
+---
+
 ## More Samples
 
 Look at the sample projects for reference on how to set up scenes, entities, and components.
@@ -135,3 +141,32 @@ The TestGame project demonstrates the engine's capabilities through the followin
 - Arrow keys (Left/Right) to move the camera
 - Click the "Spin Me!" button to trigger animations and scene transitions
 
+---
+
+## 2D Components
+
+### Current
+- Grid
+- Hex Grid
+- Sprite
+- Sound Effect
+- Song
+
+### Planned
+ 
+- Isometric Grid
+- Particles
+
+---
+
+## UI Components
+
+### Current
+- Button
+- Label
+
+### Planned
+- Panel
+- Slider
+- Toggle
+- Progress Bar
