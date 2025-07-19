@@ -157,9 +157,9 @@ The TestGame project demonstrates the engine's capabilities through the followin
 
 ## UI Components
 
-| Current | Planned      |
-|---------|--------------|
-| Button  | Panel        |
-| Label   | Slider       |
-|         | Toggle       |
-|         | Progress Bar |
+| Current      | Planned         |
+|--------------|-----------------|
+| Button       | Panel           |
+| Label        | Slider          |
+|              | Toggle          |
+|              | Progress Bar    |

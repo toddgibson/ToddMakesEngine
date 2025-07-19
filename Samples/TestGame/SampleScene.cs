@@ -68,7 +68,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
     
     protected override void Initialize()
     {
-        AddUiComponent(new Button("btnSpin", Name == "SampleScene" ? "Spin Me!" : "Whoa Dude!", HandleButtonClick));
+        AddUiComponent(new Button("btnSpin", Name == "SampleScene" ? AssetManager.GetLocalizedText("spinme") : "Whoa Dude!", HandleButtonClick));
         _label = AddUiComponent(new Label("lblHello", "Hello World!"));
 
         var spriteTexture = AssetManager.GetTexture("adventurers");

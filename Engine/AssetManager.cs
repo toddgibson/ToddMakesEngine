@@ -1,3 +1,6 @@
+using System.Globalization;
+using System.Reflection;
+using System.Resources;
 using Engine.Components2d;
 using Raylib_cs;
 
@@ -8,6 +11,7 @@ public static class AssetManager
     private static readonly Dictionary<string, Texture2D> Textures = new();
     private static readonly Dictionary<string, Sound> Sounds = new();
     private static readonly Dictionary<string, Music> Songs = new();
+    private static ResourceManager? ResourceManager;
     
     public static Texture2D LoadTexture(string path, string key = "", TextureFilter filterMode = TextureFilter.Point)
     {
@@ -86,5 +90,17 @@ public static class AssetManager
         foreach (var song in Songs.Values)
             Raylib.UnloadMusicStream(song);
         Songs.Clear();
+    }
+
+    public static void LoadLocalizationResource(string resourceName, CultureInfo? cultureInfo = null)
+    {
+        ResourceManager = new ResourceManager(resourceName, Assembly.GetEntryAssembly()!);
+        if (cultureInfo != null)
+            CultureInfo.CurrentUICulture = cultureInfo;
+    }
+
+    public static string GetLocalizedText(string key)
+    {
+        return ResourceManager?.GetString(key) ?? string.Empty;
     }
 }

@@ -14,6 +14,10 @@ public class SampleGame(GameSettings settings) : Game(settings)
         AssetManager.LoadSound("Assets/clean-scream.mp3", "scream");
         AssetManager.LoadSong("Assets/dreams_of_peace_2.ogg", "peace");
         
+        // Localize using resources
+        AssetManager.LoadLocalizationResource("TestGame.Assets.Text");
+        Console.WriteLine($@"Text Resource Value: {AssetManager.GetLocalizedText("HelloWorld")}");
+        
         var sampleScene = new SampleScene(this);
         var sampleScene2 = new SampleScene(this, "SampleScene2");
         
