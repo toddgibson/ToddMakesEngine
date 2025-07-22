@@ -1,6 +1,6 @@
 # ToddMakesEngine 
 
-This is a simple 2D game engine built with C# and [Raylib](https://github.com/raysan5/raylib). The primary goal is to include enough tooling within the engine to enable building games in a fast and efficient manner.
+This is a simple 2D game engine built with C# and [Raylib](https://github.com/raysan5/raylib). The primary goal for this project is to learn. The secondary goal is to include enough tooling within the engine to enable building games in a fast and efficient manner.
 
 This project is available under the MIT license. 
 [Raylib](https://github.com/raysan5/raylib) and the [Raylib_cs](https://github.com/raylib-cs/raylib-cs) language bindings are available under their respective licenses.

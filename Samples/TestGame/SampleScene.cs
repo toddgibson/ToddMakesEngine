@@ -148,11 +148,12 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         _hexGrid = new HexGrid(new Vector2(8, 8), HexGrid.Style.PointyTop, 39)
         {
             DrawDebugLines = true,
-            DrawDebugSidePoints = true
+            DrawDebugSidePoints = true,
+            DrawDebugCoordinates = true
         };
         AddEntity(new Entity("HexGridEntity")
             {
-                Position = new Vector2(464f, 80f)
+                Position = new Vector2(464f, 80f),
             })
             .AddComponent2D(_hexGrid);
         foreach (var cell in _hexGrid.Cells)
@@ -220,20 +221,20 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
         };
         _hexPathFinder.UpdatePathNodeNeighbors(hexCell2.GridPosition, hexCell2.Neighbors);
 
-        for (var i = 0; i < 10000; i++)
-        {
-            e.AddComponent2D(new Sprite()
-            {
-                Texture = spriteTexture,
-                Mode = SpriteMode.Framed,
-                FrameSize = Vector2.One * 16,
-                CurrentFrame = Random.Range(0, 4),
-                LocalPosition = Random.Vector2(-250, 250),
-                PivotPoint = new Vector2(0.5f * 16, 0.5f * 16),
-                Size = new Vector2(16, 16),
-                Scale = Vector2.One * 3
-            });
-        }
+        // for (var i = 0; i < 10000; i++)
+        // {
+        //     e.AddComponent2D(new Sprite()
+        //     {
+        //         Texture = spriteTexture,
+        //         Mode = SpriteMode.Framed,
+        //         FrameSize = Vector2.One * 16,
+        //         CurrentFrame = Random.Range(0, 4),
+        //         LocalPosition = Random.Vector2(-250, 250),
+        //         PivotPoint = new Vector2(0.5f * 16, 0.5f * 16),
+        //         Size = new Vector2(16, 16),
+        //         Scale = Vector2.One * 3
+        //     });
+        // }
 
         AddEntity(new Entity("campfire")
             {
@@ -247,7 +248,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
                 CurrentFrame = 0,
                 Size = new Vector2(64, 64),
                 AnimationEnabled = true,
-                FramesPerSecond = 10
+                FramesPerSecond = 10,
             });
     }
 

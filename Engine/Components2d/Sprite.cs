@@ -40,7 +40,7 @@ public class Sprite : Component2d
             int locOutlineColor = Raylib.GetShaderLocation(_outlineShader, "outlineColor");
 
             // Set default values that will be updated in Draw method
-            Raylib.SetShaderValue(_outlineShader, locThickness, 1f, ShaderUniformDataType.Float);
+            Raylib.SetShaderValue(_outlineShader, locThickness, 0.5f, ShaderUniformDataType.Float);
             Raylib.SetShaderValue(_outlineShader, locOutlineColor, new Vector4(1, 1, 1, 1), ShaderUniformDataType.Vec4);
         }
     }
@@ -95,7 +95,7 @@ public class Sprite : Component2d
         {
             // Update resolution with actual texture dimensions
             int locResolution = Raylib.GetShaderLocation(_outlineShader, "resolution");
-            Raylib.SetShaderValue(_outlineShader, locResolution, new Vector2(Texture.Width, Texture.Height), ShaderUniformDataType.Vec2);
+            Raylib.SetShaderValue(_outlineShader, locResolution, new Vector2(WorldRectangle.Width, WorldRectangle.Height), ShaderUniformDataType.Vec2);
 
             Raylib.BeginShaderMode(_outlineShader);
         }
