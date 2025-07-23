@@ -122,6 +122,7 @@ public class GameScene(Game game, string name = "GameScene") : Scene(game, name)
 
         var ballEntity = GetFirstEntityOfType<BallEntity>();
         var ballSprite = ballEntity.GetComponentOfType<Sprite>();
+        
         ballSprite.Scale = Vector2.Zero;
         ballSprite
             .TweenColorTint(ColorHelpers.GetRandomColor(), 1f)
@@ -132,6 +133,7 @@ public class GameScene(Game game, string name = "GameScene") : Scene(game, name)
                     ballSprite.TweenLocalScale(Vector2.One, 0.25f);
                 });
             });
+        
         RunAtInterval(() =>
         {
             ballEntity.SetBallReady();
