@@ -148,12 +148,23 @@ In your *.csproj* file, make sure asset folders and files are set to copy during
 
 ---
 
-## More Samples
+## Samples
 
-Look at the sample projects for reference on how to set up scenes, entities, and components.
+In the Samples folder you will see projects designed to be used as examples of how to make games
+with this engine. They can be used as a reference on how to set up scenes, entities, and components, game logic, etc.
+
+### Basic Game
+Based on the documentation above, this sample shows how to set up a basic project for getting started.
+
+### Pong
+A full game sample of the classic pong game. Each paddle is player controlled.
+
+(**W**, **S** for the left paddle | **Up**, **Down** for the right)
+
+### TestGame
 The TestGame project demonstrates the engine's capabilities through the following features:
 
-### Scene Setup
+#### Features
 - Interactive UI with a spinning button
 - Bouncing "Hello World" label
 - Multiple animated sprite characters
@@ -161,7 +172,7 @@ The TestGame project demonstrates the engine's capabilities through the followin
 - Hexagonal grid pathfinding
 - Campfire animated sprite
 
-### Controls
+#### Controls
 - Arrow keys (Left/Right) to move the camera
 - Click the "Spin Me!" button to trigger animations and scene transitions
 
