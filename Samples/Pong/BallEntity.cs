@@ -52,6 +52,7 @@ public class BallEntity(string name = "ball") : Entity(name)
         Position = pos;
     }
 
+    private bool _wasCollidingWithEdgeLastFrame = false;
     private void CheckScreenEdgeCollision()
     {
         if (Position.X < 0)
@@ -63,7 +64,10 @@ public class BallEntity(string name = "ball") : Entity(name)
             HandleScoringEvent(PlayerPaddleEntity.PlayerPaddleSideEnum.Left);
         }
 
-        if (Position.Y < 0 || Position.Y > Scene.Game.Settings.ScreenHeight)
+        var isCollidingWithEdge = Position.Y < 0 || Position.Y > Scene.Game.Settings.ScreenHeight;
+        var result = isCollidingWithEdge && !_wasCollidingWithEdgeLastFrame;
+        _wasCollidingWithEdgeLastFrame = isCollidingWithEdge;
+        if (result)
         {
             AssetManager.GetSound("wallHitSound").Play();
             Speed = Speed with { Y = -Speed.Y };
@@ -81,7 +85,7 @@ public class BallEntity(string name = "ball") : Entity(name)
     {
         if (_player1PaddleSprite == null || _player2PaddleSprite == null) return;
 
-        if (_ballSprite.IsCollidingWith(_player1PaddleSprite) || _ballSprite.IsCollidingWith(_player2PaddleSprite))
+        if (_ballSprite.CollisionJustOccuredWith(_player1PaddleSprite) || _ballSprite.CollisionJustOccuredWith(_player2PaddleSprite))
         {
             AssetManager.GetSound("paddleHitSound").Play();
             Speed = Speed with { X = -Speed.X };
@@ -92,6 +96,7 @@ public class BallEntity(string name = "ball") : Entity(name)
 
     private void ResetPosition()
     {
+        Speed = Speed with { X = -Speed.X };
         Position = new Vector2(Scene.Game.Settings.ScreenWidth / 2f, Scene.Game.Settings.ScreenHeight / 2f);
     }
 

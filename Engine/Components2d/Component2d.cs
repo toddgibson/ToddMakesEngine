@@ -45,10 +45,31 @@ public class Component2d
                    && mousePosition.Y <= WorldRectangle.Y + WorldRectangle.Height;
         }
     }
+    
+    private readonly HashSet<Component2d> _collidingWithLastFrame = new();
 
     public bool IsCollidingWith(Component2d other)
     {
         return Raylib.CheckCollisionRecs(WorldRectangle, other.WorldRectangle);
+    }
+    
+    public bool CollisionJustOccuredWith(Component2d other)
+    {
+        bool isColliding = Raylib.CheckCollisionRecs(WorldRectangle, other.WorldRectangle);
+        bool wasColliding = _collidingWithLastFrame.Contains(other);
+
+        if (isColliding && !wasColliding)
+        {
+            _collidingWithLastFrame.Add(other);
+            return true; // collision just started
+        }
+
+        if (!isColliding && wasColliding)
+        {
+            _collidingWithLastFrame.Remove(other); // collision ended
+        }
+
+        return false;
     }
     
     // internal Vector2[] GetRotatedCorners()
