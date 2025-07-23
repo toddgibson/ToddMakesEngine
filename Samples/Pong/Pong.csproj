@@ -445,6 +445,10 @@
       <Content Include="Assets\Sounds\impactMetal_002.ogg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Remove="Assets\Effects\magic_05.png" />
+      <Content Include="Assets\Effects\magic_05.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

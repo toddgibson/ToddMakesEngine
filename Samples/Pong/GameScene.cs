@@ -15,6 +15,9 @@ public class GameScene(Game game, string name = "GameScene") : Scene(game, name)
     
     private Label _player1Label;
     private Label _player2Label;
+    
+    private Sprite _player1ScoreSprite;
+    private Sprite _player2ScoreSprite;
 
     public static Action<PlayerPaddleEntity.PlayerPaddleSideEnum>? PlayerScored;
     
@@ -48,6 +51,32 @@ public class GameScene(Game game, string name = "GameScene") : Scene(game, name)
         
         AddUiComponent(_player1Label);
         AddUiComponent(_player2Label);
+
+        _player1ScoreSprite = new Sprite()
+        {
+            Texture = AssetManager.GetTexture("magic_05"),
+            Size = Vector2.One * 128,
+            Tint = Color.Gold,
+            Scale = Vector2.Zero,
+            PivotPoint = Vector2.One * 32
+        };
+        AddEntity(new Entity("player1ScoreEffect")
+        {
+            Position = _player1Label.Position + new Vector2(40, 40)
+        }).AddComponent2D(_player1ScoreSprite);
+        
+        _player2ScoreSprite = new Sprite()
+        {
+            Texture = AssetManager.GetTexture("magic_05"),
+            Size = Vector2.One * 128,
+            Scale = Vector2.Zero,
+            Tint = Color.Gold,
+            PivotPoint = Vector2.One * 32
+        };
+        AddEntity(new Entity("player2ScoreEffect")
+        {
+            Position = new Vector2(Game.Settings.ScreenWidth - 150f, 80)
+        }).AddComponent2D(_player2ScoreSprite);
     }
 
     private void HandlePlayerScored(PlayerPaddleEntity.PlayerPaddleSideEnum sideThatScored)
@@ -58,11 +87,31 @@ public class GameScene(Game game, string name = "GameScene") : Scene(game, name)
         {
             _player1Score++;
             _player1Label.Text = $"Player 1: {_player1Score}";
+            _player1ScoreSprite
+                .TweenLocalRotation(180f, 0.5f)
+                .TweenLocalScale(Vector2.One * 2f, 0.25f)
+                .OnFinished(() =>
+                {
+                    _player1ScoreSprite.TweenLocalScale(Vector2.Zero, 0.3f).OnFinished(() =>
+                    {
+                        _player1ScoreSprite.LocalRotation = 0f;
+                    });
+                });
         }
         else
         {
             _player2Score++;
             _player2Label.Text = $"Player 2: {_player2Score}";
+            _player2ScoreSprite
+                .TweenLocalRotation(180f, 0.5f)
+                .TweenLocalScale(Vector2.One * 2f, 0.25f)
+                .OnFinished(() =>
+                {
+                    _player2ScoreSprite.TweenLocalScale(Vector2.Zero, 0.3f).OnFinished(() =>
+                    {
+                        _player2ScoreSprite.LocalRotation = 0f;
+                    });
+                });
         }
 
         if (_player1Score >= 10 || _player2Score >= 10)
@@ -70,7 +119,21 @@ public class GameScene(Game game, string name = "GameScene") : Scene(game, name)
             Game.SceneManager.NavigateToScene("gameOverScene", sideThatScored);
         }
 
-        RunAtInterval(() => { GetFirstEntityOfType<BallEntity>().SetBallReady(); }, 2f, true);
+        var ballEntity = GetFirstEntityOfType<BallEntity>();
+        var ballSprite = ballEntity.GetComponentOfType<Sprite>();
+        ballSprite.Scale = Vector2.Zero;
+        ballSprite
+            .TweenLocalScale(Vector2.One * 2f, 0.25f).OnFinished(() =>
+            {
+                ballSprite.TweenLocalScale(Vector2.One * 0.5f, 0.25f).OnFinished(() =>
+                {
+                    ballSprite.TweenLocalScale(Vector2.One, 0.25f);
+                });
+            });
+        RunAtInterval(() =>
+        {
+            ballEntity.SetBallReady();
+        }, 2f, true);
     }
 
     protected override void Activated(object? payload = null)

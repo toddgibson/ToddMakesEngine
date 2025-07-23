@@ -103,7 +103,7 @@ public class Sprite : Component2d
             Raylib.BeginShaderMode(_outlineShader);
         }
         
-        Raylib.DrawTexturePro(Texture, new Rectangle(CurrentFrame * _frameWidth, 0, _frameWidth, _frameHeight), WorldRectangle, PivotPoint, 0f, Tint);
+        Raylib.DrawTexturePro(Texture, new Rectangle(CurrentFrame * _frameWidth, 0, _frameWidth, _frameHeight), WorldRectangle, PivotPoint, LocalRotation, Tint);
 
         if (EnableOutlineShader)
         {
