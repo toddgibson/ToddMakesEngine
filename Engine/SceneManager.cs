@@ -13,7 +13,7 @@ public class SceneManager
     
     private Stack<Scene> NavigationStack = new();
     
-    public void SetActiveScene(Scene scene, bool clearNavigationStack = true)
+    public void SetActiveScene(Scene scene, object? payload = null, bool clearNavigationStack = true)
     {
         if (CurrentScene == scene) return;
         
@@ -24,12 +24,13 @@ public class SceneManager
         
         NavigationStack.Push(scene);
         SceneChanged?.Invoke(scene.Name, NavigationStack.Count);
-        scene.Activated();
+        scene.Activated(payload);
     }
-    public void SetActiveScene(string sceneName, bool clearNavigationStack = true) => SetActiveScene(GetSceneByName(sceneName) ?? throw new InvalidOperationException($"Scene with name {sceneName} not found."), clearNavigationStack);
+    public void SetActiveScene(string sceneName, object? payload = null, bool clearNavigationStack = true) => 
+        SetActiveScene(GetSceneByName(sceneName) ?? throw new InvalidOperationException($"Scene with name {sceneName} not found."), payload, clearNavigationStack);
     
-    public void NavigateToScene(Scene scene) => SetActiveScene(scene, false);
-    public void NavigateToScene(string sceneName) => SetActiveScene(sceneName, false);
+    public void NavigateToScene(Scene scene, object? payload = null) => SetActiveScene(scene, payload, false);
+    public void NavigateToScene(string sceneName, object? payload = null) => SetActiveScene(sceneName, payload, false);
     public void NavigateBack()
     {
         if (NavigationStack.Count == 1) return;

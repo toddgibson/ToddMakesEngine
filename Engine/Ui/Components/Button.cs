@@ -76,6 +76,8 @@ public class Button : TexturedUiComponent
 
     internal override void Update(float delta)
     {
+        base.Update(delta);
+        
         if (!IsEnabled) return;
 
         if (IsHovered && Raylib.IsMouseButtonPressed(0))

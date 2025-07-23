@@ -1,0 +1,450 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Assets\Sounds\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Assets\campfire.png" />
+      <None Remove="Assets\peace.ogg" />
+      <None Remove="Assets\scream.mp3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Engine\Engine.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Assets\ballBlue.png" />
+      <Content Include="Assets\ballBlue.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\ballGrey.png" />
+      <Content Include="Assets\ballGrey.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonDefault.png" />
+      <Content Include="Assets\buttonDefault.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonDefault_bottom.png" />
+      <Content Include="Assets\buttonDefault_bottom.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonDefault_bottomleft.png" />
+      <Content Include="Assets\buttonDefault_bottomleft.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonDefault_bottomright.png" />
+      <Content Include="Assets\buttonDefault_bottomright.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonDefault_left.png" />
+      <Content Include="Assets\buttonDefault_left.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonDefault_mid.png" />
+      <Content Include="Assets\buttonDefault_mid.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonDefault_right.png" />
+      <Content Include="Assets\buttonDefault_right.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonDefault_top.png" />
+      <Content Include="Assets\buttonDefault_top.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonDefault_topleft.png" />
+      <Content Include="Assets\buttonDefault_topleft.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonDefault_topright.png" />
+      <Content Include="Assets\buttonDefault_topright.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonSelected.png" />
+      <Content Include="Assets\buttonSelected.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonSelected_bottom.png" />
+      <Content Include="Assets\buttonSelected_bottom.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonSelected_bottomleft.png" />
+      <Content Include="Assets\buttonSelected_bottomleft.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonSelected_bottomright.png" />
+      <Content Include="Assets\buttonSelected_bottomright.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonSelected_left.png" />
+      <Content Include="Assets\buttonSelected_left.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonSelected_mid.png" />
+      <Content Include="Assets\buttonSelected_mid.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonSelected_right.png" />
+      <Content Include="Assets\buttonSelected_right.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonSelected_top.png" />
+      <Content Include="Assets\buttonSelected_top.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonSelected_topleft.png" />
+      <Content Include="Assets\buttonSelected_topleft.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\buttonSelected_topright.png" />
+      <Content Include="Assets\buttonSelected_topright.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_blue_diamond.png" />
+      <Content Include="Assets\element_blue_diamond.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_blue_diamond_glossy.png" />
+      <Content Include="Assets\element_blue_diamond_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_blue_polygon.png" />
+      <Content Include="Assets\element_blue_polygon.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_blue_polygon_glossy.png" />
+      <Content Include="Assets\element_blue_polygon_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_blue_rectangle.png" />
+      <Content Include="Assets\element_blue_rectangle.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_blue_rectangle_glossy.png" />
+      <Content Include="Assets\element_blue_rectangle_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_blue_square.png" />
+      <Content Include="Assets\element_blue_square.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_blue_square_glossy.png" />
+      <Content Include="Assets\element_blue_square_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_green_diamond.png" />
+      <Content Include="Assets\element_green_diamond.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_green_diamond_glossy.png" />
+      <Content Include="Assets\element_green_diamond_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_green_polygon.png" />
+      <Content Include="Assets\element_green_polygon.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_green_polygon_glossy.png" />
+      <Content Include="Assets\element_green_polygon_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_green_rectangle.png" />
+      <Content Include="Assets\element_green_rectangle.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_green_rectangle_glossy.png" />
+      <Content Include="Assets\element_green_rectangle_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_green_square.png" />
+      <Content Include="Assets\element_green_square.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_green_square_glossy.png" />
+      <Content Include="Assets\element_green_square_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_grey_diamond.png" />
+      <Content Include="Assets\element_grey_diamond.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_grey_diamond_glossy.png" />
+      <Content Include="Assets\element_grey_diamond_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_grey_polygon.png" />
+      <Content Include="Assets\element_grey_polygon.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_grey_polygon_glossy.png" />
+      <Content Include="Assets\element_grey_polygon_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_grey_rectangle.png" />
+      <Content Include="Assets\element_grey_rectangle.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_grey_rectangle_glossy.png" />
+      <Content Include="Assets\element_grey_rectangle_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_grey_square.png" />
+      <Content Include="Assets\element_grey_square.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_grey_square_glossy.png" />
+      <Content Include="Assets\element_grey_square_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_purple_cube_glossy.png" />
+      <Content Include="Assets\element_purple_cube_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_purple_diamond.png" />
+      <Content Include="Assets\element_purple_diamond.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_purple_diamond_glossy.png" />
+      <Content Include="Assets\element_purple_diamond_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_purple_polygon.png" />
+      <Content Include="Assets\element_purple_polygon.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_purple_polygon_glossy.png" />
+      <Content Include="Assets\element_purple_polygon_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_purple_rectangle.png" />
+      <Content Include="Assets\element_purple_rectangle.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_purple_rectangle_glossy.png" />
+      <Content Include="Assets\element_purple_rectangle_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_purple_square.png" />
+      <Content Include="Assets\element_purple_square.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_red_diamond.png" />
+      <Content Include="Assets\element_red_diamond.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_red_diamond_glossy.png" />
+      <Content Include="Assets\element_red_diamond_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_red_polygon.png" />
+      <Content Include="Assets\element_red_polygon.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_red_polygon_glossy.png" />
+      <Content Include="Assets\element_red_polygon_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_red_rectangle.png" />
+      <Content Include="Assets\element_red_rectangle.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_red_rectangle_glossy.png" />
+      <Content Include="Assets\element_red_rectangle_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_red_square.png" />
+      <Content Include="Assets\element_red_square.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_red_square_glossy.png" />
+      <Content Include="Assets\element_red_square_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_yellow_diamond.png" />
+      <Content Include="Assets\element_yellow_diamond.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_yellow_diamond_glossy.png" />
+      <Content Include="Assets\element_yellow_diamond_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_yellow_polygon.png" />
+      <Content Include="Assets\element_yellow_polygon.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_yellow_polygon_glossy.png" />
+      <Content Include="Assets\element_yellow_polygon_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_yellow_rectangle.png" />
+      <Content Include="Assets\element_yellow_rectangle.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_yellow_rectangle_glossy.png" />
+      <Content Include="Assets\element_yellow_rectangle_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_yellow_square.png" />
+      <Content Include="Assets\element_yellow_square.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\element_yellow_square_glossy.png" />
+      <Content Include="Assets\element_yellow_square_glossy.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\paddleBlu.png" />
+      <Content Include="Assets\paddleBlu.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\paddleRed.png" />
+      <Content Include="Assets\paddleRed.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\particleCartoonStar.png" />
+      <Content Include="Assets\particleCartoonStar.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\particleSmallStar.png" />
+      <Content Include="Assets\particleSmallStar.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\particleStar.png" />
+      <Content Include="Assets\particleStar.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\selectorA.png" />
+      <Content Include="Assets\selectorA.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\selectorB.png" />
+      <Content Include="Assets\selectorB.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\selectorC.png" />
+      <Content Include="Assets\selectorC.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Fonts\Kenney Blocks.ttf" />
+      <Content Include="Assets\Fonts\Kenney Blocks.ttf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Fonts\Kenney Future.ttf" />
+      <Content Include="Assets\Fonts\Kenney Future.ttf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Fonts\Kenney Future Narrow.ttf" />
+      <Content Include="Assets\Fonts\Kenney Future Narrow.ttf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Fonts\Kenney High.ttf" />
+      <Content Include="Assets\Fonts\Kenney High.ttf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Fonts\Kenney High Square.ttf" />
+      <Content Include="Assets\Fonts\Kenney High Square.ttf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Fonts\Kenney Mini.ttf" />
+      <Content Include="Assets\Fonts\Kenney Mini.ttf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Fonts\Kenney Mini Square.ttf" />
+      <Content Include="Assets\Fonts\Kenney Mini Square.ttf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Fonts\Kenney Mini Square Mono.ttf" />
+      <Content Include="Assets\Fonts\Kenney Mini Square Mono.ttf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Fonts\Kenney Pixel.ttf" />
+      <Content Include="Assets\Fonts\Kenney Pixel.ttf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Fonts\Kenney Pixel Square.ttf" />
+      <Content Include="Assets\Fonts\Kenney Pixel Square.ttf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Fonts\Kenney Rocket.ttf" />
+      <Content Include="Assets\Fonts\Kenney Rocket.ttf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Fonts\Kenney Rocket Square.ttf" />
+      <Content Include="Assets\Fonts\Kenney Rocket Square.ttf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\backgrounds\colored_castle.png" />
+      <Content Include="Assets\backgrounds\colored_castle.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\backgrounds\uncolored_castle.png" />
+      <Content Include="Assets\backgrounds\uncolored_castle.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Sounds\mouseclick1.ogg" />
+      <None Remove="Assets\Sounds\mousehover.ogg" />
+      <None Remove="Assets\Sounds\rollover4.ogg" />
+      <Content Include="Assets\Shaders\outline.frag" />
+      <Content Include="Assets\Sounds\rollover4.ogg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Sounds\bong_001.ogg" />
+      <Content Include="Assets\Sounds\bong_001.ogg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Sounds\confirmation_002.ogg" />
+      <Content Include="Assets\Sounds\confirmation_002.ogg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Songs\song1.wav" />
+      <Content Include="Assets\Songs\song1.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Songs\song2.wav" />
+      <Content Include="Assets\Songs\song2.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Songs\song3.wav" />
+      <Content Include="Assets\Songs\song3.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Songs\song4.wav" />
+      <Content Include="Assets\Songs\song4.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Songs\song5.wav" />
+      <Content Include="Assets\Songs\song5.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Shaders\outline.frag" />
+      <Content Update="Assets\Shaders\outline.frag">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\paddleBlu_vert.png" />
+      <Content Include="Assets\paddleBlu_vert.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\paddleRed_vert.png" />
+      <Content Include="Assets\paddleRed_vert.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Sounds\forceField_001.ogg" />
+      <Content Include="Assets\Sounds\forceField_001.ogg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\Sounds\impactMetal_002.ogg" />
+      <Content Include="Assets\Sounds\impactMetal_002.ogg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+</Project>

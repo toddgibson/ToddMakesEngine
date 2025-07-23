@@ -21,7 +21,7 @@ public static class EngineManager
         {
             game.InitializeInternal();
             
-            while (!Raylib.WindowShouldClose())
+            while (!game.ShouldQuit)
             {
                 game.UpdateInternal();
                 game.DrawInternal();

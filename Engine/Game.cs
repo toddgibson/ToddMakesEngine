@@ -20,7 +20,8 @@ public abstract class Game(GameSettings settings) : IDisposable
             Raylib.GetScreenHeight() / MainCamera.Zoom
         )
     );
-    
+
+    internal bool ShouldQuit = false;
     public bool DisplayFrameData = false;
 
 #if DEBUG
@@ -46,16 +47,19 @@ public abstract class Game(GameSettings settings) : IDisposable
     protected void AddScene(Scene scene, bool makeActiveScene = false)
     {
         SceneManager.AddScene(scene);
+        scene.Game = this;
         if (makeActiveScene)
             SetActiveScene(scene);
     }
 
-    public void SetActiveScene(Scene sampleScene) => SceneManager.SetActiveScene(sampleScene);
-    public void SetActiveScene(string sceneName) => SceneManager.SetActiveScene(sceneName);
+    public void SetActiveScene(Scene sampleScene, object? payload = null) => SceneManager.SetActiveScene(sampleScene, payload);
+    public void SetActiveScene(string sceneName, object? payload = null) => SceneManager.SetActiveScene(sceneName, payload);
     protected void RemoveScene(Scene scene) => SceneManager.RemoveScene(scene);
 
     internal void UpdateInternal()
     {
+        ShouldQuit = Raylib.WindowShouldClose() && !Raylib.IsKeyPressed(KeyboardKey.Escape);
+        
         if (SceneManager.CurrentScene is null)
             throw new ConstraintException("There is no active scene.");
         
@@ -68,6 +72,8 @@ public abstract class Game(GameSettings settings) : IDisposable
                          .Where(p => p.ShouldRun))
             {
                 action.Run();
+                if (action.SingleRunOnly)
+                    SceneManager.CurrentScene.CancelInterval(action.Action);
             }
         }
         TweenSystem.Update(deltaTime);
@@ -133,6 +139,8 @@ public abstract class Game(GameSettings settings) : IDisposable
         
         Raylib.EndDrawing();
     }
+    
+    public void Quit() => ShouldQuit = true;
 
     public void Dispose()
     {

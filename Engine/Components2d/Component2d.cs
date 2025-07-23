@@ -12,7 +12,7 @@ public class Component2d
     public Vector2 GlobalPosition => Entity.Position + LocalPosition;
     public uint DrawLayer { get; set; }
     public Vector2 Scale { get; set; } = Vector2.One;
-    public float LocalRotation { get; set; }
+    public float LocalRotation { get; private set; }
     public float GlobalRotation => Entity.Rotation + LocalRotation;
     public Vector2 PivotPoint { get; set; }
     public Vector2 Size { get; set; }
@@ -45,4 +45,36 @@ public class Component2d
                    && mousePosition.Y <= WorldRectangle.Y + WorldRectangle.Height;
         }
     }
+
+    public bool IsCollidingWith(Component2d other)
+    {
+        return Raylib.CheckCollisionRecs(WorldRectangle, other.WorldRectangle);
+    }
+    
+    // internal Vector2[] GetRotatedCorners()
+    // {
+    //     float rot = MathF.PI * LocalRotation / 180f;
+    //     float cos = MathF.Cos(rot);
+    //     float sin = MathF.Sin(rot);
+    //
+    //     // Define local corners relative to origin
+    //     Vector2 topLeft     = -PivotPoint;
+    //     Vector2 topRight    = new Vector2(Size.X - PivotPoint.X, -PivotPoint.Y);
+    //     Vector2 bottomRight = new Vector2(Size.X - PivotPoint.X, Size.Y - PivotPoint.Y);
+    //     Vector2 bottomLeft  = new Vector2(-PivotPoint.X, Size.Y - PivotPoint.Y);
+    //
+    //     // Rotate and translate
+    //     Vector2 Rotate(Vector2 v) => new Vector2(
+    //         v.X * cos - v.Y * sin,
+    //         v.X * sin + v.Y * cos
+    //     );
+    //     
+    //     return new[]
+    //     {
+    //         LocalPosition + Rotate(topLeft),
+    //         LocalPosition + Rotate(topRight),
+    //         LocalPosition + Rotate(bottomRight),
+    //         LocalPosition + Rotate(bottomLeft)
+    //     };
+    // }
 }

@@ -46,6 +46,7 @@ public class Sprite : Component2d
     }
     
     private Rectangle _drawRect;
+    //public Rectangle DrawRect => _drawRect;
     private int _currentFrame = 0;
     public Texture2D Texture { get; set; }
     public Color Tint { get; set; } = Color.White;
@@ -56,7 +57,9 @@ public class Sprite : Component2d
     private float _animationTimer = 0f;
     public Vector2 FrameSize { get; set; } = Vector2.NaN;
     
-    public bool EnableOutlineShader { get; set; }
+    public bool DrawDebugLines { get; set; } = false;
+    
+    internal bool EnableOutlineShader { get; set; }
 
     public int CurrentFrame
     {
@@ -99,13 +102,17 @@ public class Sprite : Component2d
 
             Raylib.BeginShaderMode(_outlineShader);
         }
-
-        _drawRect = new Rectangle(WorldRectangle.X + PivotPoint.X, WorldRectangle.Y + PivotPoint.Y, WorldRectangle.Width, WorldRectangle.Height);
-        Raylib.DrawTexturePro(Texture, new Rectangle(CurrentFrame * _frameWidth, 0, _frameWidth, _frameHeight), _drawRect, PivotPoint, LocalRotation, Tint);
+        
+        Raylib.DrawTexturePro(Texture, new Rectangle(CurrentFrame * _frameWidth, 0, _frameWidth, _frameHeight), WorldRectangle, PivotPoint, 0f, Tint);
 
         if (EnableOutlineShader)
         {
             Raylib.EndShaderMode();
+        }
+
+        if (DrawDebugLines)
+        {
+            Raylib.DrawRectangleLinesEx(WorldRectangle, 2f, Color.Green);
         }
     }
 }

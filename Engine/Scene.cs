@@ -10,7 +10,7 @@ public abstract class Scene(Game game, string name)
 {
     public readonly Guid Id = Guid.NewGuid(); 
     public string Name { get; } = name;
-    protected Game Game { get; } = game;
+    public Game Game { get; internal set; } = game;
     
     internal readonly List<UiComponent> UiComponents = [];
     internal readonly List<IntervalAction> IntervalActions = [];
@@ -30,18 +30,23 @@ public abstract class Scene(Game game, string name)
     protected T AddEntity<T>(T entity) where T : Entity
     {
         Entities.Add(entity);
+        entity.Scene = this;
+        entity.Initialize();
         return entity;
     }
 
     protected void RemoveEntity<T>(T entity) where T : Entity => Entities.Remove(entity);
 
-    protected List<T> GetEntitiesOfType<T>() where T : Entity =>
+    public T? GetFirstEntityOfType<T>() where T : Entity =>
+        GetEntitiesOfType<T>().FirstOrDefault();
+    
+    public List<T> GetEntitiesOfType<T>() where T : Entity =>
         Entities.AsValueEnumerable().Where(p => p is T && p.Active)
             .Cast<T>()
             .ToList(); 
     
     protected internal abstract void Initialize();
-    protected internal virtual void Activated() { }
+    protected internal virtual void Activated(object? payload = null) { }
     protected internal virtual void Deactivated() { }
 
     internal void UpdateInternal(float deltaTime)
@@ -70,12 +75,12 @@ public abstract class Scene(Game game, string name)
     
     protected internal virtual void Update(float deltaTime) { }
 
-    protected void RunAtInterval(Action action, float delaySeconds)
+    protected void RunAtInterval(Action action, float delaySeconds, bool singleRunOnly = false)
     {
-        IntervalActions.Add(new IntervalAction(action, delaySeconds));
+        IntervalActions.Add(new IntervalAction(action, delaySeconds, singleRunOnly));
     }
     
-    protected void CancelInterval(Action action)
+    protected internal void CancelInterval(Action action)
     {
         var intervalAction = IntervalActions.FirstOrDefault(p => p.Action == action);
         if (intervalAction == null) return;
@@ -85,11 +90,12 @@ public abstract class Scene(Game game, string name)
     protected void CancelAllIntervals() => IntervalActions.Clear();
 }
 
-internal class IntervalAction(Action action, float delaySeconds)
+internal class IntervalAction(Action action, float delaySeconds, bool singleRunOnly = false)
 {
     internal Action Action { get; } = action;
     private double DelaySeconds { get; } = delaySeconds;
-    private double LastRunTime { get; set; }
+    private double LastRunTime { get; set; } = singleRunOnly ? Raylib.GetTime() : 0;
+    internal bool SingleRunOnly { get; } = singleRunOnly;
     
     internal bool ShouldRun => Raylib.GetTime() > LastRunTime + DelaySeconds;
     internal void Run()

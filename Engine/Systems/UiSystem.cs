@@ -16,8 +16,8 @@ public static class UiSystem
     {
         try
         {
-            DefaultFont = Raylib.LoadFontEx("DefaultEngineAssets/Brawler-Bold.ttf", 96, null, 0);
-            DefaultButtonTexture = Raylib.LoadTexture("DefaultEngineAssets/basic-button.png");
+            DefaultFont = AssetManager.LoadFont("DefaultEngineAssets/Brawler-Bold.ttf", "engine_default_font", 96);
+            DefaultButtonTexture = AssetManager.LoadTexture("DefaultEngineAssets/basic-button.png", "engine_default_button");
         }
         catch (Exception e)
         {

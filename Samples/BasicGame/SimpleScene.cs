@@ -28,7 +28,7 @@ public class SimpleScene(Game game, string name = "SimpleScene") : Scene(game, n
     }
 
     // Optional: Do something when the scene becomes active
-    protected override void Activated() 
+    protected override void Activated(object? payload = null) 
     {
         AssetManager.GetSong("peace-song").Play();
     }

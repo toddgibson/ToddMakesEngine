@@ -16,6 +16,8 @@ public class Entity(string name)
 
     internal readonly List<Component2d> Component2Ds = [];
     
+    public Scene Scene { get; internal set; }
+    
     public Entity AddComponent2D<T>(T component) where T : Component2d
     {
         component.SetEntity(this);
@@ -43,6 +45,8 @@ public class Entity(string name)
             component.Update(deltaTime);
         }
     }
+    
+    public virtual void Initialize() { }
     
     public virtual void Update(float deltaTime) { }
 }

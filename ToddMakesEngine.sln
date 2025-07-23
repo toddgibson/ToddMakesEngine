@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicGame", "Samples\BasicGame\BasicGame.csproj", "{20E3C27A-7DB3-4C0B-9767-B5BB673E1FE3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pong", "Samples\Pong\Pong.csproj", "{04ca6624-1840-48bf-b3cf-10b2c79341d2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{20E3C27A-7DB3-4C0B-9767-B5BB673E1FE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20E3C27A-7DB3-4C0B-9767-B5BB673E1FE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20E3C27A-7DB3-4C0B-9767-B5BB673E1FE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04ca6624-1840-48bf-b3cf-10b2c79341d2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {04ca6624-1840-48bf-b3cf-10b2c79341d2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {04ca6624-1840-48bf-b3cf-10b2c79341d2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {04ca6624-1840-48bf-b3cf-10b2c79341d2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

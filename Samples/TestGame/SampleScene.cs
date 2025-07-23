@@ -25,7 +25,7 @@ public class SimpleScene(Game game, string name = "SimpleScene") : Scene(game, n
             });
     }
 
-    protected override void Activated()
+    protected override void Activated(object? payload = null)
     {
         // Optional: Do something when the scene becomes active
         AssetManager.GetSong("peace-song").Play();
@@ -252,7 +252,7 @@ public class SampleScene(Game game, string name = "SampleScene") : Scene(game, n
             });
     }
 
-    protected override void Activated()
+    protected override void Activated(object? payload = null)
     {
         Log.Info($"Scene {Name} activated!", ConsoleColor.DarkGreen);
         SceneManager.SceneChanged += HandleSceneChanged;

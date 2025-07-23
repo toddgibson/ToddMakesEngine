@@ -1,8 +1,10 @@
+using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
 using Engine.Components2d;
 using Raylib_cs;
+using Engine.Logging;
 
 namespace Engine;
 
@@ -11,7 +13,71 @@ public static class AssetManager
     private static readonly Dictionary<string, Texture2D> Textures = new();
     private static readonly Dictionary<string, Sound> Sounds = new();
     private static readonly Dictionary<string, Music> Songs = new();
+    private static readonly Dictionary<string, Font> Fonts = new();
     private static ResourceManager? ResourceManager;
+
+    public static async Task LoadAllTextures(string folderPath = "Assets/", string keyPrefix = "", TextureFilter filterMode = TextureFilter.Point, bool recursive = true, IProgress<float>? progress = null)
+    {
+        if (!Directory.Exists(folderPath))
+        {
+            Log.Warning($"{nameof(LoadAllTextures)} - Directory not found: {folderPath}");
+            return;
+        }
+        
+        var textureFiles = Directory.GetFiles(folderPath, "*.png", recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly)
+            .Concat(Directory.GetFiles(folderPath, "*.jpg", recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
+            .Concat(Directory.GetFiles(folderPath, "*.jpeg", recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
+            .ToArray();
+        
+        if (textureFiles.Length == 0)
+        {
+            Log.Warning($"{nameof(LoadAllTextures)} - No textures found in path: {folderPath}");
+            return;
+        }
+
+        var totalFiles = textureFiles.Length;
+        for (var i = 0; i < textureFiles.Length; i++)
+        {
+            var textureFile = textureFiles[i];
+            LoadTexture(textureFile, $"{keyPrefix}{Path.GetFileNameWithoutExtension(textureFile)}", filterMode);
+
+            var progressPercent = i + 1f / totalFiles;
+            progress?.Report(progressPercent);
+            
+            if (progressPercent % 1 == 0)
+                await Task.Yield();
+        }
+    }
+    
+    public static async Task LoadAllFonts(string folderPath = "Assets/", string keyPrefix = "", int fontSize = 64, bool recursive = true, IProgress<float>? progress = null)
+    {
+        if (!Directory.Exists(folderPath))
+        {
+            Log.Warning($"{nameof(LoadAllFonts)} - Directory not found: {folderPath}");
+            return;
+        }
+
+        var fontFiles = Directory.GetFiles(folderPath, "*.ttf", recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+        
+        if (fontFiles.Length == 0)
+        {
+            Log.Warning($"{nameof(LoadAllFonts)} - No fonts found in path: {folderPath}");
+            return;
+        }
+
+        var totalFiles = fontFiles.Length;
+        for (var i = 0; i < fontFiles.Length; i++)
+        {
+            var fontFile = fontFiles[i];
+            LoadFont(fontFile, $"{keyPrefix}{Path.GetFileNameWithoutExtension(fontFile)}", fontSize);
+
+            var progressPercent = i + 1f / totalFiles;
+            progress?.Report(progressPercent);
+            
+            if (progressPercent % 1 == 0)
+                await Task.Yield();
+        }
+    }
     
     public static Texture2D LoadTexture(string path, string key = "", TextureFilter filterMode = TextureFilter.Point)
     {
@@ -45,7 +111,10 @@ public static class AssetManager
     public static SoundEffect GetSound(string key, float volume = 1f, float pitch = 1f)
     {
         if (Sounds.TryGetValue(key, out var asset))
-            return new SoundEffect(asset, volume, pitch);
+        {
+            var sound = new SoundEffect(asset, volume, pitch);
+            return sound;
+        }
         throw new KeyNotFoundException($"Sound with key '{key}' was not found.");
     }
 
@@ -102,5 +171,26 @@ public static class AssetManager
     public static string GetLocalizedText(string key)
     {
         return ResourceManager?.GetString(key) ?? string.Empty;
+    }
+
+    public static Font LoadFont(string path, string key, int fontSize = 64)
+    {
+        var asset = Raylib.LoadFontEx(path, fontSize, null, 0);
+        Fonts[string.IsNullOrEmpty(key) ? Path.GetFileNameWithoutExtension(path) : key] = asset;
+        return asset;
+    }
+    
+    public static void UnloadFont(string key)
+    {
+        var asset = Fonts[key];
+        Raylib.UnloadFont(asset);
+        Fonts.Remove(key);
+    }
+    
+    public static Font GetFont(string key)
+    {
+        if (Fonts.TryGetValue(key, out var asset))
+            return asset;
+        throw new KeyNotFoundException($"Font with key '{key}' was not found.");
     }
 }

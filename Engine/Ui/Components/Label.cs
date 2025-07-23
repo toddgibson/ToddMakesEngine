@@ -36,13 +36,15 @@ public class Label : UiComponent
     public string Text { get; set; } = "";
     public Font Font { get; set; } = UiSystem.DefaultFont;
     public float FontSize { get; set; } = 24;
-    public float FontSpacing { get; set; }
+    public float FontSpacing { get; set; } = 0.2f;
     public Color TextColor { get; set; } = Color.White;
+    
+    public enum TextAlignmentEnum { Left, Center, Right }
+
+    public TextAlignmentEnum TextAlignment { get; set; } = TextAlignmentEnum.Left;
     
     internal override void Draw()
     {
-        Raylib.DrawTextPro(Font, Text, Position, PivotPoint, Rotation, FontSize * Scale.X, FontSpacing * Scale.X, TextColor);
+        Raylib.DrawTextPro(Font, Text, ScreenRectangle.Position, PivotPoint, Rotation, FontSize * Scale.X, FontSpacing * Scale.X, TextColor);
     }
-
-    internal override void Update(float delta) { }
 }

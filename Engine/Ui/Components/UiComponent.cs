@@ -79,19 +79,26 @@ public abstract class UiComponent
         }
     }
 
-    public bool IsHovered
-    {
-        get
-        {
-            var mousePosition = Raylib.GetMousePosition();
-            return mousePosition.X >= ScreenRectangle.X
-                   && mousePosition.X <= ScreenRectangle.X + ScreenRectangle.Width
-                   && mousePosition.Y >= ScreenRectangle.Y
-                   && mousePosition.Y <= ScreenRectangle.Y + ScreenRectangle.Height;
-        }
-    }
+    public bool IsHovered { get; private set; }
+    
+    public Action<UiComponent>? OnHover { get; set; }
 
     internal abstract void Draw();
 
-    internal abstract void Update(float delta);
+    internal virtual void Update(float delta)
+    {
+        var isCurrentlyHovered = IsHovered;
+        IsHovered = CheckForHover();
+        if (isCurrentlyHovered != IsHovered && IsHovered)
+            OnHover?.Invoke(this);
+    }
+
+    private bool CheckForHover()
+    {
+        var mousePosition = Raylib.GetMousePosition();
+        return mousePosition.X >= ScreenRectangle.X
+                 && mousePosition.X <= ScreenRectangle.X + ScreenRectangle.Width
+                 && mousePosition.Y >= ScreenRectangle.Y
+                 && mousePosition.Y <= ScreenRectangle.Y + ScreenRectangle.Height;
+    }
 }
