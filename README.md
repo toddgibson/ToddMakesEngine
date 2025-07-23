@@ -159,7 +159,8 @@ with this engine. They can be used as a reference on how to set up scenes, entit
 Based on the documentation above, this sample shows how to set up a basic project for getting started.
 
 ### Pong
-A full game sample of the classic pong game. Each paddle is player controlled.
+Dog-fooding. A full game loop, with multiple scenes, collisions, win-condition, effects, etc. 
+A spin on the classic game, Pong. Each paddle is player-controlled.
 
 (**W**, **S** for the left paddle | **Up**, **Down** for the right)
 
