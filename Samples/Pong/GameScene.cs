@@ -2,6 +2,7 @@ using System.Numerics;
 using Engine;
 using Engine.Components2d;
 using Engine.Entities;
+using Engine.Extensions;
 using Engine.Ui.Components;
 using Raylib_cs;
 using Random = Engine.Random;
@@ -123,6 +124,7 @@ public class GameScene(Game game, string name = "GameScene") : Scene(game, name)
         var ballSprite = ballEntity.GetComponentOfType<Sprite>();
         ballSprite.Scale = Vector2.Zero;
         ballSprite
+            .TweenColorTint(ColorHelpers.GetRandomColor(), 1f)
             .TweenLocalScale(Vector2.One * 2f, 0.25f).OnFinished(() =>
             {
                 ballSprite.TweenLocalScale(Vector2.One * 0.5f, 0.25f).OnFinished(() =>

@@ -31,7 +31,6 @@ public class BallEntity(string name = "ball") : Entity(name)
             Size = new Vector2(22, 22),
             CollisionShape = CollisionShape2D.Circle,
             Tint = Color.Yellow,
-            DrawDebugLines = true
         };
         AddComponent2D(_ballSprite);
     }
