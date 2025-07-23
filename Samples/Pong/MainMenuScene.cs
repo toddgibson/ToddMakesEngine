@@ -70,12 +70,12 @@ public class MainMenuScene(Game game, string name = "MenuScene") : Scene(game, n
             Size = new Vector2(200, 40),
         });
 
-        AddUiComponent(new Label("footer", "Made with ToddMakesEngine", Color.DarkGray,
+        AddUiComponent(new Label("footer", "Made with ToddMakesEngine    |    Assets courtesy of Kenney", Color.DarkGray,
             AssetManager.GetFont("Kenney Pixel Square"))
         {
             Anchor = UiComponent.AnchorEnum.BottomCenter,
             TextAlignment = Label.TextAlignmentEnum.Center,
-            Position = new Vector2(150, 0f),
+            Position = new Vector2(330, 0f),
             FontSize = 20
         });
 
