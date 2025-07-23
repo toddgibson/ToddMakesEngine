@@ -26,7 +26,7 @@ This project is available under the MIT license.
 - Sound effects and music playback
 - Camera controls
 - Tween system for smooth animations
-- GLSL Shader support
+- GLSL Shader support (work in progress)
 
 ---
 
