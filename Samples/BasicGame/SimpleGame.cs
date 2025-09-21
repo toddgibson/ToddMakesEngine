@@ -4,7 +4,7 @@ namespace BasicGame;
 
 public class SimpleGame(GameSettings settings) : Game(settings)
 {
-    protected override void Initialize()
+    protected override async Task Initialize()
     {
         // Load assets
         AssetManager.LoadTexture("Assets/campfire.png", "campfire");

@@ -4,11 +4,14 @@ namespace Pong;
 
 public class PongGame(GameSettings settings) : Game(settings)
 {
-    protected override void Initialize()
+    protected override async Task Initialize()
     {
+        var textureProgress = new Progress<float>();
+        textureProgress.ProgressChanged += TextureProgress_ProgressChanged;
+
         // Load assets
-        AssetManager.LoadAllTextures();
-        AssetManager.LoadAllFonts();
+        await AssetManager.LoadAllTextures(progress: textureProgress);
+        await AssetManager.LoadAllFonts();
         
         AssetManager.LoadSound("Assets/Sounds/rollover4.ogg", "mouseHover");
         AssetManager.LoadSound("Assets/Sounds/bong_001.ogg", "quitSound");
@@ -31,5 +34,10 @@ public class PongGame(GameSettings settings) : Game(settings)
 #if DEBUG
         DisplayFrameData = true;
 #endif
+    }
+
+    private void TextureProgress_ProgressChanged(object? sender, float e)
+    {
+        Console.WriteLine($"Texture Load Progress: {e}");
     }
 }

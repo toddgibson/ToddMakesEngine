@@ -4,7 +4,7 @@ namespace TestGame;
 
 public class SampleGame(GameSettings settings) : Game(settings)
 {
-    protected override void Initialize()
+    protected override async Task Initialize()
     {
         AssetManager.LoadTexture("Assets/sprite.png", "adventurers");
         AssetManager.LoadTexture("Assets/test-tile.png", "test-tile");

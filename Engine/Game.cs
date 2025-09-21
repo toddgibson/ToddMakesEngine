@@ -32,17 +32,25 @@ public abstract class Game(GameSettings settings) : IDisposable
     private double AverageFrameTime => AverageFrameDrawTime + AverageFrameUpdateTime;
 #endif
 
-    internal void InitializeInternal()
+    internal async Task InitializeInternal()
     {
-        UiSystem.Initialize();
-        Initialize();
+        try
+        {
+            UiSystem.Initialize();
+            await Initialize();
+            
+            MainCamera.Target = new Vector2(Settings.ScreenWidth * 0.5f, Settings.ScreenHeight * 0.5f);
+            MainCamera.Offset = new Vector2(Settings.ScreenWidth * 0.5f, Settings.ScreenHeight * 0.5f);
+            MainCamera.Zoom = 1f;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
         
-        MainCamera.Target = new Vector2(Settings.ScreenWidth * 0.5f, Settings.ScreenHeight * 0.5f);
-        MainCamera.Offset = new Vector2(Settings.ScreenWidth * 0.5f, Settings.ScreenHeight * 0.5f);
-        MainCamera.Zoom = 1f;
     }
 
-    protected virtual void Initialize() { }
+    protected virtual async Task Initialize() { }
 
     protected void AddScene(Scene scene, bool makeActiveScene = false)
     {
